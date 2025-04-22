@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "prettier": "prettier -w .",
-"prepare": "git config core.hooksPath .git-hooks && chmod +x .git-hooks/pre-commit || echo 'Not in a git repo'"
+    "prepare": "git config core.hooksPath .git-hooks && chmod +x .git-hooks/pre-commit || echo 'Not in a git repo'"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.2.0",
@@ -35,4 +35,3 @@
     "typescript": "^5"
   }
 }
-
