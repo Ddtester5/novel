@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "prettier": "prettier -w .",
+    "parse": "tsx src/features/parsing/start_parse.ts",
     "prepare": "git config core.hooksPath .git-hooks && chmod +x .git-hooks/pre-commit || echo 'Not in a git repo'"
   },
   "dependencies": {
@@ -18,9 +19,11 @@
     "lucide-react": "^0.503.0",
     "next": "15.3.1",
     "payload": "^3.35.1",
+    "playwright": "^1.52.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "tailwind-merge": "^3.2.0",
+    "tsx": "^4.19.3",
     "tw-animate-css": "^1.2.8"
   },
   "devDependencies": {
