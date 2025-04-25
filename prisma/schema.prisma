@@ -6,10 +6,89 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
+  output   = "../generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+model Novells {
+id String @id @default(cuid())
+created_at DateTime @default(now())
+updated_at DateTime @updatedAt
+
+original_title String @unique
+original_description String
+original_author String 
+
+slug String @unique
+image_path String
+ru_title String @unique
+ru_description String
+
+views_count Int @default(0)
+
+chapters Chapters[]
+
+tags NovellsTags[]
+
+genre Genres? @relation(fields: [genre_id],references: [id],onDelete: SetNull,onUpdate:Cascade )
+genre_id String?
+
+@@map("novells")
+}
+
+model Tags {
+  id String @id @default(cuid())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  original_title String @unique
+  ru_title String @unique
+  slug String @unique
+
+  novells NovellsTags[]
+
+  @@map("tags")
+}
+
+model NovellsTags {
+id String @id @default(cuid())
+novells Novells? @relation(fields: [novell_id],references: [id],onDelete: Cascade, onUpdate: Cascade)
+tags Tags? @relation(fields: [tag_id],references: [id],onDelete: Cascade,onUpdate: Cascade)
+novell_id String?
+tag_id String?
+
+@@map("novells_tags")
+}
+
+model Genres {
+id String @id @default(cuid())
+created_at DateTime @default(now())
+updated_at DateTime @updatedAt
+
+original_title String @unique
+ru_title String @unique
+slug String @unique
+
+novells Novells[]
+
+@@map("genres")
+}
+
+model Chapters {
+  id String @id @default(cuid())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  original_title String?
+  chapter_number Int
+  original_content String
+
+novells Novells @relation(fields: [novell_id],references: [id],onDelete: Cascade,onUpdate: Cascade)
+novell_id String
+
+@@map("chapters")
 }

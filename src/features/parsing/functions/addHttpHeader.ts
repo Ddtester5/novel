@@ -1,6 +1,9 @@
 import { Browser, Page } from "playwright";
 
-export const addHTTPheaders = async (browser: Browser, isTest: boolean = false): Promise<Page[]> => {
+export const addHTTPheaders = async (
+  browser: Browser,
+  isTest: boolean = false,
+): Promise<Page[]> => {
   try {
     const contextToImages = await browser.newContext({
       bypassCSP: true,
@@ -54,7 +57,10 @@ export const addHTTPheaders = async (browser: Browser, isTest: boolean = false):
 
     return [page, pageToImages];
   } catch (error) {
-    console.log("Ошибка при добавлении HTTP-заголовков:", error);
+    console.log(
+      "Ошибка при добавлении HTTP-заголовков:",
+      error,
+    );
     throw error; // Проброс ошибки для логирования в вызывающем коде
   }
 };

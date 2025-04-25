@@ -1,13 +1,17 @@
 import type { NextConfig } from "next";
 const isDev = process.env.NODE_ENV !== "production";
-const s3Endpoint = process.env.S3_ENDPOINT || "http://localhost:9000";
+const s3Endpoint =
+  process.env.S3_ENDPOINT || "http://localhost:9000";
 let s3Hostname = "localhost";
 
 try {
   s3Hostname = new URL(s3Endpoint).hostname;
 } catch (error) {
   console.error("Invalid S3_ENDPOINT:", error);
-  console.error("Falling back to default hostname:", s3Hostname);
+  console.error(
+    "Falling back to default hostname:",
+    s3Hostname,
+  );
 }
 const nextConfig: NextConfig = {
   reactStrictMode: true,
@@ -15,7 +19,12 @@ const nextConfig: NextConfig = {
   productionBrowserSourceMaps: false,
   trailingSlash: false,
   poweredByHeader: false,
-  rewrites: async () => [{ source: "/storage/:path*", destination: `${s3Endpoint}/:path*` }],
+  rewrites: async () => [
+    {
+      source: "/storage/:path*",
+      destination: `${s3Endpoint}/:path*`,
+    },
+  ],
   staticPageGenerationTimeout: 240,
   images: {
     formats: ["image/webp", "image/avif"],
@@ -34,7 +43,10 @@ const nextConfig: NextConfig = {
         { key: "X-Content-Type-Options", value: "nosniff" },
         { key: "X-Frame-Options", value: "SAMEORIGIN" },
         { key: "X-XSS-Protection", value: "1; mode=block" },
-        { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+        {
+          key: "Referrer-Policy",
+          value: "strict-origin-when-cross-origin",
+        },
         {
           key: "Content-Security-Policy",
           value: `
@@ -48,15 +60,25 @@ const nextConfig: NextConfig = {
         },
         {
           key: "Strict-Transport-Security",
-          value: "max-age=63072000; includeSubDomains; preload",
+          value:
+            "max-age=63072000; includeSubDomains; preload",
         },
         {
           key: "Permissions-Policy",
           value: "geolocation=(self), microphone=()",
         },
-        { key: "Cross-Origin-Embedder-Policy", value: "credentialless " },
-        { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
-        { key: "Cross-Origin-Resource-Policy", value: "same-origin" },
+        {
+          key: "Cross-Origin-Embedder-Policy",
+          value: "credentialless ",
+        },
+        {
+          key: "Cross-Origin-Opener-Policy",
+          value: "same-origin",
+        },
+        {
+          key: "Cross-Origin-Resource-Policy",
+          value: "same-origin",
+        },
         {
           key: "Set-Cookie",
           value: "SameSite=None; Secure",
@@ -68,7 +90,10 @@ const nextConfig: NextConfig = {
 if (isDev) {
   nextConfig.experimental = {
     serverActions: {
-      allowedOrigins: ["localhost:3000", "**.app.github.dev"],
+      allowedOrigins: [
+        "localhost:3000",
+        "**.app.github.dev",
+      ],
     },
   };
 
