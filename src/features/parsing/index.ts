@@ -13,9 +13,9 @@ export async function startParse() {
       browser,
       true,
     );
-    // await parseAllNovels(page, pageToImages);
     await parseAllGenres(page);
     await parseAllTags(page);
+    await parseAllNovels(page, pageToImages);
   } catch (error) {
     console.error("Parsing Error", error);
   } finally {

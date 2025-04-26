@@ -1,7 +1,6 @@
 import { dataBase } from "@/shared/lib/db_connect";
 import { safeTranslate } from "@/shared/lib/openai/translate/safe_translate";
 import { translateText } from "@/shared/lib/openai/translate/translate_text";
-import { sleep } from "@/shared/lib/sleep";
 import { createGenre } from "./create_genre";
 
 export async function createGenres(genres: string[]) {
@@ -45,7 +44,6 @@ export async function createGenres(genres: string[]) {
           new_genre?.original_title,
           new_genre?.ru_title,
         );
-        await sleep(1000);
       }
     }
   } catch (error) {

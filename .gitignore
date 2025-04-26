@@ -42,3 +42,5 @@ next-env.d.ts
 /media
 /img_for_test
 /generated
+/tech
+/argos-translate-models

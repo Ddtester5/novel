@@ -1,5 +1,8 @@
+import { downloadImageForS3 } from "@/shared/lib/download_image_for_S3";
 import { safeTranslate } from "@/shared/lib/openai/translate/safe_translate";
+import { translateChapter } from "@/shared/lib/openai/translate/translate_chapter";
 import { translateText } from "@/shared/lib/openai/translate/translate_text";
+import { transliterateToUrl } from "@/shared/lib/transliterate";
 import { Page } from "playwright";
 
 export async function parseSingleNovell({
@@ -25,13 +28,11 @@ export async function parseSingleNovell({
         return {
           novell_image_url: `${el.querySelector("img")?.getAttribute("src")}`,
           novell_author: `${el
-            .querySelectorAll("div.booknav2 > p")[0]
-            .textContent?.replace(/^作者\s*[:：]\s*/i, "")
-            .trim()}`,
+            .querySelectorAll("div.booknav2 > p > a")[0]
+            .textContent?.trim()}`,
           novell_genre: `${el
-            .querySelectorAll("div.booknav2 > p")[1]
-            .textContent?.replace(/^分类\s*[:：]\s*/i, "")
-            .trim()}`,
+            .querySelectorAll("div.booknav2 > p > a")[1]
+            .textContent?.trim()}`,
         };
       });
     });
@@ -42,36 +43,60 @@ export async function parseSingleNovell({
         return el.textContent?.trim().toLowerCase();
       });
     });
+  const novell_description = await page
+    .locator("div.navtxt")
+    .innerText();
+  const last_chapter = await page
+    .locator("div.qustime > ul > li >a > span")
+    .nth(0)
+    .textContent();
+  const url_to_all_chapters = await page
+    .locator("a.more-btn")
+    .getAttribute("href");
+  const img_url = (await page
+    .locator("div.bookimg2 > img")
+    .getAttribute("src")) as string;
   const novell_title_ru = await safeTranslate(
     novell_original_title,
     translateText,
     "тайтл-название для новеллы",
   );
-  //  const novell_author_ru = await safeTranslate(novell[0].novell_author,translateText,"имя автора новеллы")
-  const novell_genre_ru = await safeTranslate(
-    novell[0].novell_genre,
-    translateText,
-    "жанр новеллы",
+  const novell_description_ru = await safeTranslate(
+    novell_description.replace(/小说关键词[\s\S]*/, ""),
+    translateChapter,
+    "описание онлайн новеллы",
+    0.1,
   );
-  const novell_tags_ru = await safeTranslate(
-    tags.join(","),
-    translateText,
-    "тэги новеллы",
+  const slug = transliterateToUrl(novell_title_ru);
+
+  const image_path = await downloadImageForS3(
+    img_url,
+    slug,
+    "novell_image",
+    {
+      page: pageToImages,
+      convert_to_png: false,
+      remove_wattermark: true,
+      proxy_tor: true,
+      incriase: true,
+      textDelete: true,
+    },
   );
   console.log({
     original_title: novell_original_title,
     original_genre: novell[0].novell_genre,
     original_tags: tags,
+    novell_description: novell_description.replace(
+      /小说关键词[\s\S]*/,
+      "",
+    ),
+    last_chapter,
+    url_to_all_chapters,
     ru_title: novell_title_ru.replace(/\./gi, ""),
-    ru_genre: novell_genre_ru
-      .toLowerCase()
-      .replace(/\./gi, ""),
+    ru_description: novell_description_ru,
     original_author: novell[0].novell_author.trim(),
-    ru_tags: novell_tags_ru
-      .toLowerCase()
-      .replace(/\./g, "")
-      .replace(/,\s*/g, ",")
-      .split(","),
     original_url: novell_url,
+    slug,
+    image_path,
   });
 }

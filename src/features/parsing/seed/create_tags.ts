@@ -2,7 +2,6 @@ import { dataBase } from "@/shared/lib/db_connect";
 import { safeTranslate } from "@/shared/lib/openai/translate/safe_translate";
 import { translateText } from "@/shared/lib/openai/translate/translate_text";
 import { createTag } from "./create_tag";
-import { sleep } from "@/shared/lib/sleep";
 
 export async function createTags(tags: string[]) {
   try {
@@ -45,7 +44,6 @@ export async function createTags(tags: string[]) {
           new_tag?.original_title,
           new_tag?.ru_title,
         );
-        await sleep(1000);
       }
     }
   } catch (error) {
