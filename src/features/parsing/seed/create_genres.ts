@@ -1,32 +1,32 @@
 import { dataBase } from "@/shared/lib/db_connect";
 import { safeTranslate } from "@/shared/lib/openai/translate/safe_translate";
 import { translateText } from "@/shared/lib/openai/translate/translate_text";
-import { createTag } from "./create_tag";
 import { sleep } from "@/shared/lib/sleep";
+import { createGenre } from "./create_genre";
 
-export async function createTags(tags: string[]) {
+export async function createGenres(genres: string[]) {
   try {
-    const existing_tags = await dataBase.tags.findMany({
+    const existing_genres = await dataBase.genres.findMany({
       where: {
         original_title: {
-          in: tags,
+          in: genres,
         },
       },
       select: {
         original_title: true,
       },
     });
-    const existing_titles = existing_tags.map((e) => {
+    const existing_titles = existing_genres.map((e) => {
       return e.original_title;
     });
-    const new_tags = tags.filter((e) => {
+    const new_genres = genres.filter((e) => {
       return !existing_titles.includes(e);
     });
-    if (new_tags.length > 0) {
+    if (new_genres.length > 0) {
       const ru_titles = await safeTranslate(
-        new_tags.join(","),
+        new_genres.join(","),
         translateText,
-        "тэги онлайн новеллы в том же порядке",
+        "жанры онлайн новеллы в том же порядке",
         1,
       );
       const parsed_ru_titles = ru_titles
@@ -35,20 +35,20 @@ export async function createTags(tags: string[]) {
         .replace(/,\s*/g, ",")
         .trim()
         .split(",");
-      for (let i = 0; i < new_tags.length; i++) {
-        const new_tag = await createTag(
-          new_tags[i],
+      for (let i = 0; i < new_genres.length; i++) {
+        const new_genre = await createGenre(
+          new_genres[i],
           parsed_ru_titles[i],
         );
         console.log(
-          "created tag",
-          new_tag?.original_title,
-          new_tag?.ru_title,
+          "created genre",
+          new_genre?.original_title,
+          new_genre?.ru_title,
         );
         await sleep(1000);
       }
     }
   } catch (error) {
-    console.error("create tags error", error);
+    console.error("create genres error", error);
   }
 }

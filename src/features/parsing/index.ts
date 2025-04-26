@@ -2,6 +2,7 @@ import { Browser, chromium } from "playwright";
 import { addHTTPheaders } from "./functions/addHttpHeader";
 import { parseAllNovels } from "./modules/parse_all_novells";
 import { parseAllTags } from "./modules/parse_all_tags";
+import { parseAllGenres } from "./modules/parse_all_genres";
 
 export async function startParse() {
   console.log("start parsing");
@@ -13,6 +14,7 @@ export async function startParse() {
       true,
     );
     // await parseAllNovels(page, pageToImages);
+    await parseAllGenres(page);
     await parseAllTags(page);
   } catch (error) {
     console.error("Parsing Error", error);

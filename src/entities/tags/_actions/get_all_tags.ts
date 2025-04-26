@@ -1,5 +1,5 @@
 import { dataBase } from "@/shared/lib/db_connect";
-import { Tags } from "../../../generated/prisma";
+import { Tags } from "../../../../generated/prisma";
 
 export async function getAllTags(): Promise<Tags[]> {
   try {
