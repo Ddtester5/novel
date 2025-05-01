@@ -12,5 +12,5 @@ export const client = new OpenAI({
 //     "X-Title": "tech24view", // Optional. Site title for rankings on openrouter.ai.
 //   },
 // });
-export const TEXT_AI_MODEL = "deepseek-v3";
+export const TEXT_AI_MODEL = "gpt-4o";
 export const IMAGE_AI_MODEL = "flux";

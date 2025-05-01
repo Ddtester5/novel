@@ -1,3 +1,3 @@
 export const cleaneText = (text: string): string => {
-  return text.replace(/[«»"`'*[\]{}\\]/g, "").trim();
+  return text.replace(/[«»“"”`'*[\]{}\[]/g, "").trim();
 };

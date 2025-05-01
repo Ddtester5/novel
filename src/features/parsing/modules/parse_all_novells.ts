@@ -1,5 +1,6 @@
 import { Page } from "playwright";
 import { parseSingleNovell } from "./parse_single_novell";
+import { createNovell } from "../seed/create_novell";
 
 export async function parseAllNovels(
   page: Page,
@@ -21,8 +22,8 @@ export async function parseAllNovels(
           };
         });
       });
-    for (let i = 23; i < 24; i++) {
-      await parseSingleNovell({
+    for (let i = 22; i < novels.length; i++) {
+      const novell = await createNovell({
         page,
         pageToImages,
         ...novels[i],

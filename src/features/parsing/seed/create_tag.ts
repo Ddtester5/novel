@@ -7,8 +7,10 @@ export async function createTag(
 ) {
   try {
     const slug = transliterateToUrl(ru_title);
-    const new_tag = await dataBase.tags.create({
-      data: {
+    const new_tag = await dataBase.tags.upsert({
+      where: { original_title: original_title },
+      update: {},
+      create: {
         slug: slug,
         ru_title: ru_title,
         original_title: original_title,

@@ -12,7 +12,7 @@ export async function parseAllTags(page: Page) {
       .locator("div.mybox > div.tag > ul > a")
       .evaluateAll((e) => {
         return e.map((el) => {
-          return `${el.textContent?.trim().toLowerCase()}`;
+          return `${el.textContent?.trim()}`;
         });
       });
 

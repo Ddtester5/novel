@@ -64,7 +64,7 @@ export const safeTranslate = async (
   ) => Promise<string>,
   context?: string,
   temperature?: number,
-  retries: number = 20,
+  retries: number = 50,
 ): Promise<string> => {
   for (let i = 0; i < retries; i++) {
     try {

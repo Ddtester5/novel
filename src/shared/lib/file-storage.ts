@@ -45,8 +45,6 @@ class FileStorage {
     fileName?: string,
   ): Promise<StoredFile> {
     // Создаем полный путь (если папка указана)
-    console.log(privateConfig.S3_ACCESS_KEY_ID);
-    console.log(privateConfig.S3_SECRET_ACCESS_KEY);
 
     const folderPrefix = `${tag}/`;
     const fileKey =
