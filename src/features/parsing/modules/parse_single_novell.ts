@@ -49,13 +49,10 @@ export async function parseSingleNovell({
   const novell_description = await page
     .locator("div.navtxt")
     .innerText();
-  const last_chapter = (await page
-    .locator("div.qustime > ul > li >a > span")
-    .nth(0)
-    .textContent()) as string;
-  const url_to_all_chapters = await page
+
+  const url_to_all_chapters = (await page
     .locator("a.more-btn")
-    .getAttribute("href");
+    .getAttribute("href")) as string;
   const img_url = (await page
     .locator("div.bookimg2 > img")
     .getAttribute("src")) as string;
@@ -96,10 +93,9 @@ export async function parseSingleNovell({
       /小说关键词[\s\S]*/,
       "",
     ),
-    last_chapter: last_chapter,
     url_to_all_chapters,
     ru_title: cleanHiddenCharacters(
-      novell_title_ru.replace(/\./gi, ""),
+      cleaneText(novell_title_ru.replace(/\./gi, "")),
     ),
     ru_description: cleanHiddenCharacters(
       cleaneText(novell_description_ru),

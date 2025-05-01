@@ -22,7 +22,7 @@ model Novells {
   original_title       String @unique
   original_description String
   original_author      String
-  last_chapter         String
+  url_to_all_chapters  String
 
   slug           String @unique
   image_path     String
@@ -33,9 +33,25 @@ model Novells {
 
   chapters Chapters[]
 
-  tags Tags[]
+  genre    Genres? @relation(fields: [genre_id], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  genre_id String?
+  tags     Tags[]
 
   @@map("novells")
+}
+
+model Genres {
+  id         String   @id @default(cuid())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  original_title String @unique
+  ru_title       String @unique
+  slug           String @unique
+
+  novells Novells[]
+
+  @@map("genres")
 }
 
 model Tags {

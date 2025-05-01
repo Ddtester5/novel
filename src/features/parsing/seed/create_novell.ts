@@ -26,15 +26,22 @@ export async function createNovell({
       });
       const new_novell = await dataBase.novells.create({
         data: {
+          url_to_all_chapters:
+            new_novell_info.url_to_all_chapters,
           image_path: new_novell_info.image_path,
           original_author: new_novell_info.original_author,
           original_description:
             new_novell_info.novell_description,
           original_title: new_novell_info.original_title,
-          last_chapter: new_novell_info.last_chapter,
           ru_description: new_novell_info.ru_description,
           ru_title: new_novell_info.ru_title,
           slug: new_novell_info.slug,
+          genre: {
+            connect: {
+              original_title:
+                new_novell_info.original_genre,
+            },
+          },
           tags: {
             connect: new_novell_info.original_tags.map(
               (tag_title) => ({
