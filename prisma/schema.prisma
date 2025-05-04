@@ -77,6 +77,9 @@ model Chapters {
   chapter_number   Int
   original_content String
 
+  title   String
+  content String
+
   novells   Novells @relation(fields: [novell_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
   novell_id String
 

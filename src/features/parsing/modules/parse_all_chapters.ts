@@ -1,5 +1,6 @@
 import { dataBase } from "@/shared/lib/db_connect";
 import { Page } from "playwright";
+import { parseChapter } from "./parse_chapter";
 
 export async function parseAllChapters(
   page: Page,
@@ -23,14 +24,25 @@ export async function parseAllChapters(
           };
         });
       });
-    console.log(chapters);
-    const existing_chupters =
+    const existing_chapters =
       await dataBase.chapters.findMany({
         where: {
           novell_id: novell_id,
         },
       });
-    console.log(existing_chupters);
+    const existing_titles = existing_chapters.map(
+      (e) => e.original_title,
+    );
+    const new_chapters = chapters.filter(
+      (e) => !existing_titles.includes(e.title),
+    );
+    for (const new_chapter of new_chapters) {
+      if (new_chapter.url === "#") {
+        continue;
+      }
+      await parseChapter(page, new_chapter, novell_id);
+    }
+    console.log(new_chapters);
   } catch (error) {
     console.error("parse all chapters error", error);
   }

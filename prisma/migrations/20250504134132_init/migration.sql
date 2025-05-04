@@ -6,7 +6,7 @@ CREATE TABLE "novells" (
     "original_title" TEXT NOT NULL,
     "original_description" TEXT NOT NULL,
     "original_author" TEXT NOT NULL,
-    "last_chapter" TEXT NOT NULL,
+    "url_to_all_chapters" TEXT NOT NULL,
     "slug" TEXT NOT NULL,
     "image_path" TEXT NOT NULL,
     "ru_title" TEXT NOT NULL,
@@ -49,6 +49,8 @@ CREATE TABLE "chapters" (
     "original_title" TEXT,
     "chapter_number" INTEGER NOT NULL,
     "original_content" TEXT NOT NULL,
+    "title" TEXT NOT NULL,
+    "content" TEXT NOT NULL,
     "novell_id" TEXT NOT NULL,
 
     CONSTRAINT "chapters_pkey" PRIMARY KEY ("id")
