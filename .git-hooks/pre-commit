@@ -1,0 +1,4 @@
+#!/bin/sh
+bun run prettier
+bun run lint
+git add .
