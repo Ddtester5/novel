@@ -1,6 +1,7 @@
 import { dataBase } from "@/shared/lib/db_connect";
 import { Page } from "playwright";
 import { parseSingleNovell } from "../modules/parse_single_novell";
+import { transliterateToUrl } from "@/shared/lib/transliterate";
 
 export async function createNovell({
   page,
@@ -21,31 +22,39 @@ export async function createNovell({
       const new_novell_info = await parseSingleNovell({
         page: page,
         pageToImages: pageToImages,
-        novell_original_title: novell_original_title,
         novell_url: novell_url,
+      });
+      await dataBase.genres.upsert({
+        where: {
+          ru_title: new_novell_info.genre,
+        },
+        update: {},
+        create: {
+          ru_title: new_novell_info.genre,
+          slug: transliterateToUrl(
+            new_novell_info.genre.toLowerCase(),
+          ),
+        },
       });
       const new_novell = await dataBase.novells.create({
         data: {
           url_to_all_chapters:
             new_novell_info.url_to_all_chapters,
           image_path: new_novell_info.image_path,
-          original_author: new_novell_info.original_author,
-          original_description:
+          original_title: novell_original_title,
+          ru_description:
             new_novell_info.novell_description,
-          original_title: new_novell_info.original_title,
-          ru_description: new_novell_info.ru_description,
-          ru_title: new_novell_info.ru_title,
+          ru_title: new_novell_info.title,
           slug: new_novell_info.slug,
           genre: {
             connect: {
-              original_title:
-                new_novell_info.original_genre,
+              ru_title: new_novell_info.genre,
             },
           },
           tags: {
-            connect: new_novell_info.original_tags.map(
+            connect: new_novell_info.tags.map(
               (tag_title) => ({
-                original_title: tag_title,
+                ru_title: tag_title,
               }),
             ),
           },

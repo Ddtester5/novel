@@ -18,23 +18,23 @@ services:
     networks:
       # Настройка сетей
       - backend_novell # Подключение к сети backend
-  g4f:
-    container_name: g4f_service
-    image: hlohaus789/g4f:latest-slim
-    restart: always
-    ports:
-      - "1337:1337" # Пробрасываем порт 1337
-    volumes:
-      - ./har_and_cookies:/app/har_and_cookies # Монтируем директорию har_and_cookies
-      - ./generated_images:/app/generated_images # Монтируем директорию generated_images
-    command: >
-      sh -c '
-      rm -r -f /app/g4f/ &&
-      pip install -U g4f[slim] &&
-      python -m g4f --debug'
-    networks:
-      # Настройка сетей
-      - backend_novell # Подключение к сети backend  "
+  # g4f:
+  #   container_name: g4f_service
+  #   image: hlohaus789/g4f:latest-slim
+  #   restart: always
+  #   ports:
+  #     - "1337:1337" # Пробрасываем порт 1337
+  #   volumes:
+  #     - ./har_and_cookies:/app/har_and_cookies # Монтируем директорию har_and_cookies
+  #     - ./generated_images:/app/generated_images # Монтируем директорию generated_images
+  #   command: >
+  #     sh -c '
+  #     rm -r -f /app/g4f/ &&
+  #     pip install -U g4f[slim] &&
+  #     python -m g4f --debug'
+  #   networks:
+  #     # Настройка сетей
+  #     - backend_novell # Подключение к сети backend  "
   minio:
     container_name: ${MINIO_CONTAINER}
     image: minio/minio

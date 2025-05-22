@@ -1,9 +1,4 @@
 import { downloadImageForS3 } from "@/shared/lib/download_image_for_S3";
-import { cleaneText } from "@/shared/lib/openai/translate/cleane_text";
-import { cleanHiddenCharacters } from "@/shared/lib/openai/translate/cleane_text_by_hidden_char";
-import { safeTranslate } from "@/shared/lib/openai/translate/safe_translate";
-import { translateChapter } from "@/shared/lib/openai/translate/translate_chapter";
-import { translateText } from "@/shared/lib/openai/translate/translate_text";
 import { transliterateToUrl } from "@/shared/lib/transliterate";
 import { Page } from "playwright";
 import { createTags } from "../seed/create_tags";
@@ -11,15 +6,14 @@ import { createTags } from "../seed/create_tags";
 export async function parseSingleNovell({
   page,
   pageToImages,
-  novell_original_title,
   novell_url,
 }: {
   page: Page;
   pageToImages: Page;
-  novell_original_title: string;
   novell_url: string;
 }) {
-  await page.goto(novell_url);
+  const tarsnslated_url = `${novell_url.replace(/www.69shuba.com/g, "www-69shuba-com.translate.goog")}?_x_tr_sl=zh-CN&_x_tr_tl=ru&_x_tr_hl=ru&_x_tr_pto=wapp`;
+  await page.goto(tarsnslated_url);
   await page.waitForSelector(".bookbox", {
     state: "visible",
     timeout: 60000,
@@ -29,16 +23,15 @@ export async function parseSingleNovell({
     .evaluateAll((e) => {
       return e.map((el) => {
         return {
-          novell_image_url: `${el.querySelector("img")?.getAttribute("src")}`,
-          novell_author: `${el
-            .querySelectorAll("div.booknav2 > p > a")[0]
-            .textContent?.trim()}`,
           novell_genre: `${el
             .querySelectorAll("div.booknav2 > p > a")[1]
             .textContent?.trim()}`,
         };
       });
     });
+  const novell_title_ru = await page
+    .locator("h1")
+    .innerText();
   const tags = await page
     .locator("ul.tagul > a")
     .evaluateAll((e) => {
@@ -46,6 +39,9 @@ export async function parseSingleNovell({
         return el.textContent?.trim() || "";
       });
     });
+  const parsed_tags = tags.map((e) => {
+    return e.toLowerCase().replace(/поток/gi, "").trim();
+  });
   const novell_description = await page
     .locator("div.navtxt")
     .innerText();
@@ -56,18 +52,8 @@ export async function parseSingleNovell({
   const img_url = (await page
     .locator("div.bookimg2 > img")
     .getAttribute("src")) as string;
-  const novell_title_ru = await safeTranslate(
-    novell_original_title,
-    translateText,
-    "тайтл-название для новеллы",
-  );
-  const novell_description_ru = await safeTranslate(
-    novell_description.replace(/小说关键词[\s\S]*/, ""),
-    translateChapter,
-    "описание для онлайн новеллы",
-    0.1,
-  );
-  const ru_tags = await createTags(tags);
+
+  await createTags(parsed_tags);
   const slug = transliterateToUrl(novell_title_ru);
 
   const image_path = await downloadImageForS3(
@@ -85,23 +71,11 @@ export async function parseSingleNovell({
   );
 
   return {
-    original_title: novell_original_title,
-    original_genre: novell[0].novell_genre,
-    original_tags: tags,
-    ru_tags: ru_tags,
-    novell_description: novell_description.replace(
-      /小说关键词[\s\S]*/,
-      "",
-    ),
+    genre: novell[0].novell_genre,
+    tags: parsed_tags,
+    title: novell_title_ru,
+    novell_description: novell_description,
     url_to_all_chapters,
-    ru_title: cleanHiddenCharacters(
-      cleaneText(novell_title_ru.replace(/\./gi, "")),
-    ),
-    ru_description: cleanHiddenCharacters(
-      cleaneText(novell_description_ru),
-    ),
-    original_author: novell[0].novell_author.trim(),
-    original_url: novell_url,
     slug: slug,
     image_path: image_path as string,
   };

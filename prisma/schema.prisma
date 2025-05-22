@@ -19,10 +19,9 @@ model Novells {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  original_title       String @unique
-  original_description String
-  original_author      String
-  url_to_all_chapters  String
+  original_title String @unique
+
+  url_to_all_chapters String
 
   slug           String @unique
   image_path     String
@@ -45,9 +44,8 @@ model Genres {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  original_title String @unique
-  ru_title       String @unique
-  slug           String @unique
+  ru_title String @unique
+  slug     String @unique
 
   novells Novells[]
 
@@ -59,9 +57,8 @@ model Tags {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  original_title String @unique
-  ru_title       String @unique
-  slug           String @unique
+  ru_title String @unique
+  slug     String @unique
 
   novells Novells[]
 
@@ -73,9 +70,7 @@ model Chapters {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  original_title   String?
-  chapter_number   Int
-  original_content String
+  chapter_number String
 
   title   String
   content String

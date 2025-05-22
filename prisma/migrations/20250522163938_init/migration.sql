@@ -4,8 +4,6 @@ CREATE TABLE "novells" (
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
     "original_title" TEXT NOT NULL,
-    "original_description" TEXT NOT NULL,
-    "original_author" TEXT NOT NULL,
     "url_to_all_chapters" TEXT NOT NULL,
     "slug" TEXT NOT NULL,
     "image_path" TEXT NOT NULL,
@@ -22,7 +20,6 @@ CREATE TABLE "genres" (
     "id" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
-    "original_title" TEXT NOT NULL,
     "ru_title" TEXT NOT NULL,
     "slug" TEXT NOT NULL,
 
@@ -34,7 +31,6 @@ CREATE TABLE "tags" (
     "id" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
-    "original_title" TEXT NOT NULL,
     "ru_title" TEXT NOT NULL,
     "slug" TEXT NOT NULL,
 
@@ -46,9 +42,7 @@ CREATE TABLE "chapters" (
     "id" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
-    "original_title" TEXT,
-    "chapter_number" INTEGER NOT NULL,
-    "original_content" TEXT NOT NULL,
+    "chapter_number" TEXT NOT NULL,
     "title" TEXT NOT NULL,
     "content" TEXT NOT NULL,
     "novell_id" TEXT NOT NULL,
@@ -74,16 +68,10 @@ CREATE UNIQUE INDEX "novells_slug_key" ON "novells"("slug");
 CREATE UNIQUE INDEX "novells_ru_title_key" ON "novells"("ru_title");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "genres_original_title_key" ON "genres"("original_title");
-
--- CreateIndex
 CREATE UNIQUE INDEX "genres_ru_title_key" ON "genres"("ru_title");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "genres_slug_key" ON "genres"("slug");
-
--- CreateIndex
-CREATE UNIQUE INDEX "tags_original_title_key" ON "tags"("original_title");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "tags_ru_title_key" ON "tags"("ru_title");

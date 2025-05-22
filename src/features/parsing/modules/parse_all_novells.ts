@@ -1,7 +1,5 @@
 import { Page } from "playwright";
-import { parseSingleNovell } from "./parse_single_novell";
 import { createNovell } from "../seed/create_novell";
-import { getLastChapter } from "./get_last_chapter";
 import { parseAllChapters } from "./parse_all_chapters";
 
 export async function parseAllNovels(
@@ -15,7 +13,7 @@ export async function parseAllNovels(
       timeout: 60000,
     });
     const novels = await page
-      .locator("a")
+      .locator("ul.row  a")
       .evaluateAll((e) => {
         return e.map((el) => {
           return {
@@ -24,13 +22,13 @@ export async function parseAllNovels(
           };
         });
       });
-    for (let i = 22; i < novels.length; i++) {
+    for (let i = 0; i < novels.length; i++) {
+      await page.waitForTimeout(5000);
       const novell = await createNovell({
         page,
         pageToImages,
         ...novels[i],
       });
-      // const last_chapter = await getLastChapter(page, novels[i].novell_url)
 
       await parseAllChapters(
         page,

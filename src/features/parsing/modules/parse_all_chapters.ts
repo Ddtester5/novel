@@ -30,19 +30,19 @@ export async function parseAllChapters(
           novell_id: novell_id,
         },
       });
-    const existing_titles = existing_chapters.map(
-      (e) => e.original_title,
+    const existing_nums = existing_chapters.map(
+      (e) => e.chapter_number,
     );
     const new_chapters = chapters.filter(
-      (e) => !existing_titles.includes(e.title),
+      (e) => !existing_nums.includes(e.number),
     );
     for (const new_chapter of new_chapters) {
       if (new_chapter.url === "#") {
         continue;
       }
+      await page.waitForTimeout(5000);
       await parseChapter(page, new_chapter, novell_id);
     }
-    console.log(new_chapters);
   } catch (error) {
     console.error("parse all chapters error", error);
   }
