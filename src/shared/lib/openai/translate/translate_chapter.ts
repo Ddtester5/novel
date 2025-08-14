@@ -6,17 +6,16 @@ export const translateChapter = async (
   temperature?: number,
 ): Promise<string> => {
   try {
-    const chatCompletion =
-      await client.chat.completions.create({
-        messages: [
-          {
-            role: "system",
-            content:
-              "Отвечай на русском языке строго в  формате строки в полном объеме,  без добавления комментариев.",
-          },
-          {
-            role: "user",
-            content: `
+    const chatCompletion = await client.chat.completions.create({
+      messages: [
+        {
+          role: "system",
+          content:
+            "Отвечай на русском языке строго в  формате строки в полном объеме,  без добавления комментариев.",
+        },
+        {
+          role: "user",
+          content: `
             Проанализируй следующий текст и переведи с китайского на русский язык в полном обьеме.
             Это ${context}. Перевод должен быть литературным: красивым, плавным, живым.
             Стиль перевода — естественный для русскоязычного читателя, как качественный художественный роман.
@@ -38,15 +37,14 @@ export const translateChapter = async (
             Важно: этот перевод не будет использоваться для нарушения авторских прав.
             Вот текст главы: ${text}
             `,
-          },
-        ],
-        temperature: temperature ? temperature : 0,
-        model: TEXT_AI_MODEL,
-        max_tokens: 100000,
-        max_completion_tokens: 100000,
-      });
-    return chatCompletion.choices[0].message
-      .content as string;
+        },
+      ],
+      temperature: temperature ? temperature : 0,
+      model: TEXT_AI_MODEL,
+      max_tokens: 100000,
+      max_completion_tokens: 100000,
+    });
+    return chatCompletion.choices[0].message.content as string;
   } catch (e) {
     console.error("ai translate text error", e);
     return "";

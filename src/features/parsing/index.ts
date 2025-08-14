@@ -1,18 +1,10 @@
-import {
-  Browser,
-  BrowserContext,
-  chromium,
-  Page,
-} from "playwright";
+import { Browser, BrowserContext, chromium, Page } from "playwright";
 import { addHTTPheaders } from "./functions/addHttpHeader";
 import { parseAllNovels } from "./modules/parse_all_novells";
 
 export async function startParse() {
   const timeoutPromise = new Promise((_, rej) => {
-    setTimeout(
-      () => rej(new Error("Время парсинга новелл вышло")),
-      5 * 60 * 60 * 1000,
-    );
+    setTimeout(() => rej(new Error("Время парсинга новелл вышло")), 5 * 60 * 60 * 1000);
   });
   try {
     Promise.race([exeParse(), timeoutPromise]);

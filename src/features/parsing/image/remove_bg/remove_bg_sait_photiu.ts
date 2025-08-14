@@ -16,23 +16,19 @@ export const removeBackgroundWithphotiu = async (
 ): Promise<Buffer> => {
   try {
     // Создаем временный файл из Buffer
-    const tempFilePath = path.join(
-      os.tmpdir(),
-      "input_image.png",
-    );
+    const tempFilePath = path.join(os.tmpdir(), "input_image.png");
     fs.writeFileSync(tempFilePath, imageBuffer);
 
     // Открываем сайт
     // console.log("Открываем сайт...");
-    await page.goto(
-      "https://www.photiu.ai/background-remover",
-      { timeout: 60000, waitUntil: "domcontentloaded" },
-    );
+    await page.goto("https://www.photiu.ai/background-remover", {
+      timeout: 60000,
+      waitUntil: "domcontentloaded",
+    });
     // console.log("Сайт открыт");
     await page.waitForTimeout(1000);
     await simulateMouseMovement(page);
-    const cookiebutton =
-      'button[id="CybotCookiebotDialogBodyButtonDecline"]';
+    const cookiebutton = 'button[id="CybotCookiebotDialogBodyButtonDecline"]';
     await page.waitForSelector(cookiebutton, {
       timeout: 60000,
       state: "visible",
@@ -45,10 +41,7 @@ export const removeBackgroundWithphotiu = async (
       timeout: 60000,
       state: "attached",
     });
-    await page.setInputFiles(
-      inputFileSelector,
-      tempFilePath,
-    );
+    await page.setInputFiles(inputFileSelector, tempFilePath);
     // console.log("Изображение загружено");
     await page.waitForTimeout(5000);
     // Ждем, пока изображение обработается
@@ -59,8 +52,7 @@ export const removeBackgroundWithphotiu = async (
     // console.log("Изображение обработано");
     // await page.screenshot({ path: "./img_for_test/1.png" });
     // Ждем, пока появится кнопка для скачивания
-    const downloadButtonSelector =
-      "button[id='Download HD free']";
+    const downloadButtonSelector = "button[id='Download HD free']";
     await page.waitForSelector(downloadButtonSelector, {
       timeout: 60000,
     });
@@ -72,10 +64,7 @@ export const removeBackgroundWithphotiu = async (
     ]);
 
     // Определяем временный путь для скачивания
-    const tempDownloadPath = path.join(
-      os.tmpdir(),
-      "processed_image.png",
-    );
+    const tempDownloadPath = path.join(os.tmpdir(), "processed_image.png");
 
     // Сохраняем файл на диск
     await download.saveAs(tempDownloadPath);
@@ -84,9 +73,7 @@ export const removeBackgroundWithphotiu = async (
     // console.log("Изображение без фона сохранено");
 
     // Читаем файл как Buffer
-    const processedImageBuffer = fs.readFileSync(
-      tempDownloadPath,
-    );
+    const processedImageBuffer = fs.readFileSync(tempDownloadPath);
 
     // console.log("Изображение без фона получено как Buffer");
     fs.unlinkSync(tempFilePath); // Удаляем временный файл с исходным изображением

@@ -25,25 +25,11 @@ class FileStorage {
     },
   });
 
-  async uploadImage(
-    file: File,
-    tag: string,
-    fileName?: string,
-  ) {
-    return this.upload(
-      file,
-      privateConfig.S3_IMAGES_BUCKET,
-      tag,
-      fileName,
-    );
+  async uploadImage(file: File, tag: string, fileName?: string) {
+    return this.upload(file, privateConfig.S3_IMAGES_BUCKET, tag, fileName);
   }
 
-  async upload(
-    file: File,
-    bucket: string,
-    tag: string,
-    fileName?: string,
-  ): Promise<StoredFile> {
+  async upload(file: File, bucket: string, tag: string, fileName?: string): Promise<StoredFile> {
     // Создаем полный путь (если папка указана)
 
     const folderPrefix = `${tag}/`;

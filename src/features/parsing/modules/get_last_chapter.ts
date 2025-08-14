@@ -1,9 +1,6 @@
 import { Page } from "playwright";
 
-export async function getLastChapter(
-  page: Page,
-  novell_url: string,
-) {
+export async function getLastChapter(page: Page, novell_url: string) {
   await page.goto(novell_url);
   await page.waitForSelector(".bookbox", {
     state: "visible",

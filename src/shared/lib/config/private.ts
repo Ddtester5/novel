@@ -33,6 +33,4 @@ const privateConfigSchema = z.object({
   MINIO_ROOT_PASSWORD: z.string().optional(),
 });
 
-export const privateConfig = privateConfigSchema.parse(
-  process.env,
-);
+export const privateConfig = privateConfigSchema.parse(process.env);

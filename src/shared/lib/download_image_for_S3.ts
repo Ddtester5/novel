@@ -26,10 +26,7 @@ export const downloadImageForS3 = async (
       console.log("Problem with playwright page");
       return null;
     }
-    const imgName = getImageName(
-      config.convert_to_png,
-      textForFilename,
-    );
+    const imgName = getImageName(config.convert_to_png, textForFilename);
     const response = await axios.get(url, {
       responseType: "arraybuffer",
       headers: {
@@ -37,61 +34,40 @@ export const downloadImageForS3 = async (
           "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36",
       },
     });
-    const contentType =
-      response.headers["content-type"] ||
-      "application/octet-stream";
+    const contentType = response.headers["content-type"] || "application/octet-stream";
     let processedImageBuffer = response.data;
     try {
       if (config.incriase) {
-        processedImageBuffer = await incriaseImageWithRetry(
-          processedImageBuffer,
-          config.page,
-        );
+        processedImageBuffer = await incriaseImageWithRetry(processedImageBuffer, config.page);
       }
     } catch (error) {
       console.log("Failed to increase image:", url, error);
     }
     try {
       if (config.remove_wattermark) {
-        processedImageBuffer =
-          await removeWattermarkWithRetry(
-            processedImageBuffer,
-            config.page,
-            config.textDelete,
-          );
+        processedImageBuffer = await removeWattermarkWithRetry(
+          processedImageBuffer,
+          config.page,
+          config.textDelete,
+        );
       }
     } catch (error) {
-      console.log(
-        "Failed to remove watermark:",
-        url,
-        error,
-      );
+      console.log("Failed to remove watermark:", url, error);
     }
     try {
       if (config.convert_to_png) {
-        processedImageBuffer =
-          await removeImageBackgroundWithRetry(
-            processedImageBuffer,
-            config.page,
-          );
+        processedImageBuffer = await removeImageBackgroundWithRetry(
+          processedImageBuffer,
+          config.page,
+        );
       }
     } catch (error) {
-      console.log(
-        "Failed to remove background:",
-        url,
-        error,
-      );
+      console.log("Failed to remove background:", url, error);
     }
 
-    processedImageBuffer = await replaceWatermarkWithSharp(
-      processedImageBuffer,
-      "tech24view.ru",
-    );
+    processedImageBuffer = await replaceWatermarkWithSharp(processedImageBuffer, "tech24view.ru");
     try {
-      processedImageBuffer = await сompressImageWithRetry(
-        processedImageBuffer,
-        config.page,
-      );
+      processedImageBuffer = await сompressImageWithRetry(processedImageBuffer, config.page);
     } catch (error) {
       console.log("Failed to compress image:", url, error);
     }
@@ -106,11 +82,7 @@ export const downloadImageForS3 = async (
       type: contentType,
     });
 
-    const storedFile = await fileStorage.uploadImage(
-      file,
-      imgDirNameInStorage,
-      imgName,
-    );
+    const storedFile = await fileStorage.uploadImage(file, imgDirNameInStorage, imgName);
 
     return storedFile.path;
   } catch (error) {

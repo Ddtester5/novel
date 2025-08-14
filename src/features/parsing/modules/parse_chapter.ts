@@ -19,9 +19,7 @@ export async function parseChapter(
       timeout: 60000,
     });
     await page.waitForTimeout(5000);
-    const content =
-      (await page.locator("div.txtnav ").textContent()) ||
-      "";
+    const content = (await page.locator("div.txtnav ").textContent()) || "";
 
     await createChapter({
       content: cleanHiddenCharacters(cleaneText(content)),

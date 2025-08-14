@@ -1,17 +1,13 @@
 import type { NextConfig } from "next";
 const isDev = process.env.NODE_ENV !== "production";
-const s3Endpoint =
-  process.env.S3_ENDPOINT || "http://localhost:9000";
+const s3Endpoint = process.env.S3_ENDPOINT || "http://localhost:9000";
 let s3Hostname = "localhost";
 
 try {
   s3Hostname = new URL(s3Endpoint).hostname;
 } catch (error) {
   console.error("Invalid S3_ENDPOINT:", error);
-  console.error(
-    "Falling back to default hostname:",
-    s3Hostname,
-  );
+  console.error("Falling back to default hostname:", s3Hostname);
 }
 const nextConfig: NextConfig = {
   reactStrictMode: true,
@@ -60,8 +56,7 @@ const nextConfig: NextConfig = {
         },
         {
           key: "Strict-Transport-Security",
-          value:
-            "max-age=63072000; includeSubDomains; preload",
+          value: "max-age=63072000; includeSubDomains; preload",
         },
         {
           key: "Permissions-Policy",
@@ -90,10 +85,7 @@ const nextConfig: NextConfig = {
 if (isDev) {
   nextConfig.experimental = {
     serverActions: {
-      allowedOrigins: [
-        "localhost:3000",
-        "**.app.github.dev",
-      ],
+      allowedOrigins: ["localhost:3000", "**.app.github.dev"],
     },
   };
 

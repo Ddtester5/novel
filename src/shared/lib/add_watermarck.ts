@@ -1,17 +1,11 @@
 import sharp from "sharp";
-export const replaceWatermarkWithSharp = async (
-  imageBuffer: Buffer,
-  replacementText: string,
-) => {
+export const replaceWatermarkWithSharp = async (imageBuffer: Buffer, replacementText: string) => {
   try {
     // Передаем Buffer в sharp
-    const { width, height } =
-      await sharp(imageBuffer).metadata();
+    const { width, height } = await sharp(imageBuffer).metadata();
 
     if (!width || !height) {
-      throw new Error(
-        "Не удалось получить размеры изображения.",
-      );
+      throw new Error("Не удалось получить размеры изображения.");
     }
 
     // Задаем относительные пропорции для области водяного знака
@@ -35,9 +29,7 @@ export const replaceWatermarkWithSharp = async (
     const y = Math.round(height * yRatio);
     const regionWidth = Math.round(width * widthRatio);
     const regionHeight = Math.round(height * heightRatio);
-    const fontSize = Math.round(
-      (regionWidth + regionHeight) * fontSizeKoef,
-    );
+    const fontSize = Math.round((regionWidth + regionHeight) * fontSizeKoef);
 
     // Извлекаем, размываем и вставляем область обратно
     const blurredRegion = await sharp(imageBuffer)

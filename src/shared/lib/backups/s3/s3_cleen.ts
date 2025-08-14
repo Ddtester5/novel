@@ -14,11 +14,7 @@ if (!BACKUP_DIR) {
 export const cleanupOldMinioBackups = async () => {
   const files = fs
     .readdirSync(BACKUP_DIR)
-    .filter(
-      (file) =>
-        file.startsWith("minio_backup_") &&
-        file.endsWith(".tar.bz2"),
-    )
+    .filter((file) => file.startsWith("minio_backup_") && file.endsWith(".tar.bz2"))
     .map((file) => ({
       name: file,
       path: path.join(BACKUP_DIR, file),
@@ -28,14 +24,9 @@ export const cleanupOldMinioBackups = async () => {
   const today = new Date();
   const oldFiles = files.filter((file) => {
     const fileDate = new Date(file.date);
-    const diffDays =
-      (today.getTime() - fileDate.getTime()) /
-      (1000 * 60 * 60 * 24);
+    const diffDays = (today.getTime() - fileDate.getTime()) / (1000 * 60 * 60 * 24);
     if (fileDate.getDate() === 15) {
-      fs.copyFileSync(
-        file.path,
-        path.join(BACKUP_DIR, "minio_old", file.name),
-      );
+      fs.copyFileSync(file.path, path.join(BACKUP_DIR, "minio_old", file.name));
       fs.rmSync(file.path);
     }
     return diffDays > 5;
