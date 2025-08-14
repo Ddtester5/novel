@@ -33,23 +33,23 @@ export async function exeParse() {
     console.error("Parsing Error", error);
   } finally {
     if (page) {
-      page.close();
+      await page.close();
       console.log("page closed");
     }
     if (pageToImages) {
-      pageToImages.close();
+      await pageToImages.close();
       console.log("pageToImages closed");
     }
     if (context) {
-      context.close();
+      await context.close();
       console.log("context closed");
     }
     if (contextToImages) {
-      contextToImages.close();
+      await contextToImages.close();
       console.log("contextToImages closed");
     }
     if (browser) {
-      browser.close();
+      await browser.close();
       console.log("browser closed");
     }
   }
