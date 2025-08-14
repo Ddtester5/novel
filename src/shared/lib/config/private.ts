@@ -14,7 +14,7 @@ const privateConfigSchema = z.object({
   NODE_ENV: z.string().optional(),
 
   SAIT_URL: z.string().optional(),
-  SAIT_NAME: z.string().optional(),
+  SAIT_NAME: z.string(),
   TOR_PROXY_PORT: z.string().optional(),
   TOR_CONTAINER_NAME: z.string().optional(),
   BACKUP_DIR: z.string().optional(),

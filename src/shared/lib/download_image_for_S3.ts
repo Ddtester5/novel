@@ -7,6 +7,7 @@ import { getImageName } from "./get_image_name";
 import { fileStorage } from "./file-storage";
 import { removeImageBackgroundWithRetry } from "@/features/parsing/image/remove_bg/rm_image_bg";
 import { replaceWatermarkWithSharp } from "./add_watermarck";
+import { privateConfig } from "./config/private";
 
 export const downloadImageForS3 = async (
   url: string,
@@ -65,7 +66,10 @@ export const downloadImageForS3 = async (
       console.log("Failed to remove background:", url, error);
     }
 
-    processedImageBuffer = await replaceWatermarkWithSharp(processedImageBuffer, "tech24view.ru");
+    processedImageBuffer = await replaceWatermarkWithSharp(
+      processedImageBuffer,
+      privateConfig.SAIT_NAME,
+    );
     try {
       processedImageBuffer = await сompressImageWithRetry(processedImageBuffer, config.page);
     } catch (error) {
