@@ -1,47 +1,25 @@
 services:
-  # Начало секции с сервисами
   db:
-    # Определение сервиса базы данных
-    container_name: ${POSTGRES_CONTAINER} # Имя контейнера для базы данных
-    image: postgres:15.2 # Используемый образ PostgreSQL
-    restart: always # Перезапускать контейнер всегда в случае сбоя
+    container_name: ${POSTGRES_CONTAINER}
+    image: postgres:15.2
+    restart: always
     environment:
-      # Переменные окружения для настройки базы данных
-      - POSTGRES_USER=${POSTGRES_USER} # Пользователь базы данных
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD} # Пароль пользователя базы данных
-      - POSTGRES_DB=${POSTGRES_DB} # Имя базы данных
-    ports: # Настройка портов
-      - ${POSTGRES_PORT}:5432 # Проброс порта 5432 контейнера на порт 5433 хоста
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    ports:
+      - ${POSTGRES_PORT}:5432
     volumes:
-      # Настройка томов для хранения данных
-      - postgres_data_novell:/var/lib/postgresql/data # Хранение данных PostgreSQL в томе postgres_data
+      - postgres_data_novell:/var/lib/postgresql/data
     networks:
-      # Настройка сетей
-      - backend_novell # Подключение к сети backend
-  # g4f:
-  #   container_name: g4f_service
-  #   image: hlohaus789/g4f:latest-slim
-  #   restart: always
-  #   ports:
-  #     - "1337:1337" # Пробрасываем порт 1337
-  #   volumes:
-  #     - ./har_and_cookies:/app/har_and_cookies # Монтируем директорию har_and_cookies
-  #     - ./generated_images:/app/generated_images # Монтируем директорию generated_images
-  #   command: >
-  #     sh -c '
-  #     rm -r -f /app/g4f/ &&
-  #     pip install -U g4f[slim] &&
-  #     python -m g4f --debug'
-  #   networks:
-  #     # Настройка сетей
-  #     - backend_novell # Подключение к сети backend  "
+      - backend_novell
   minio:
     container_name: ${MINIO_CONTAINER}
     image: minio/minio
     restart: always
     ports:
-      - 9000:9000
-      - 9001:9001
+      - ${MINIO_PORT}:9000
+      - ${MINIO_ADMIN_PORT}:9001
     command: minio server --console-address ":9001" /data
     environment:
       MINIO_ROOT_USER: ${MINIO_ROOT_USER}
@@ -60,8 +38,7 @@ services:
       timeout: 20s
       retries: 3
     networks:
-      # Настройка сетей
-      - backend_novell # Подключение к сети backend
+      - backend_novell
   createbuckets:
     container_name: minio-bucket
     image: minio/mc
@@ -84,14 +61,13 @@ services:
     container_name: tor_proxy
     restart: unless-stopped
     ports:
-      - "127.0.0.1:9050:9050" # SOCKS5 Proxy
+      - "127.0.0.1:${TOR_PROXY_PORT}:9050"
     environment:
       - TZ=UTC
     networks:
       - backend_novell
 
 volumes:
-  # Определение томов
   postgres_data_novell:
   minio_data_novell:
 

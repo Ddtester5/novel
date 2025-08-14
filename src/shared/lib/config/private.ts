@@ -9,33 +9,28 @@ const privateConfigSchema = z.object({
   S3_ENDPOINT: z.string(),
   S3_REGION: z.string(),
 
-  GITHUB_ID: z.string().optional(),
-  GITHUB_SECRET: z.string().optional(),
-
-  GOOGLE_CLIENT_ID: z.string().optional(),
-  GOOGLE_CLIENT_SECRET: z.string().optional(),
-
-  YANDEX_CLIENT_ID: z.string().optional(),
-  YANDEX_CLIENT_SECRET: z.string().optional(),
-
-  MAILRU_CLIENT_ID: z.string().optional(),
-  MAILRU_CLIENT_SECRET: z.string().optional(),
-
-  ADMIN_EMAILS: z.string().optional(),
-
-  GOOGLE_ANALITICS_4_ID: z.string().optional(),
-
   TELEGRAM_BOT_KEY: z.string().optional(),
   TELEGRAM_CHANNEL_ID: z.string().optional(),
-  FACEBOOK_ACCESS_TOKEN: z.string().optional(),
-  INSTAGRAM_BUSINESS_ACCOUNT_ID: z.string().optional(),
-  FACEBOOK_PAGE_ID: z.string().optional(),
-
-  TEST_ENV_BASE_URL: z.string().optional(),
-
   NODE_ENV: z.string().optional(),
 
-  PAYLOAD_SECRET: z.string().optional(),
+  SAIT_URL: z.string().optional(),
+  SAIT_NAME: z.string().optional(),
+  TOR_PROXY_PORT: z.string().optional(),
+  TOR_CONTAINER_NAME: z.string().optional(),
+  BACKUP_DIR: z.string().optional(),
+  POSTGRES_CONTAINER: z.string().optional(),
+  POSTGRES_USER: z.string().optional(),
+  POSTGRES_PASSWORD: z.string().optional(),
+  POSTGRES_HOST: z.string().optional(),
+  POSTGRES_PORT: z.string().optional(),
+  POSTGRES_DB: z.string().optional(),
+  DATABASE_URL: z.string().optional(),
+
+  MINIO_PORT: z.string().optional(),
+  MINIO_ADMIN_PORT: z.string().optional(),
+  MINIO_CONTAINER: z.string().optional(),
+  MINIO_ROOT_USER: z.string().optional(),
+  MINIO_ROOT_PASSWORD: z.string().optional(),
 });
 
 export const privateConfig = privateConfigSchema.parse(
