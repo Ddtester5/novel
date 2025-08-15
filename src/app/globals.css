@@ -1,9 +1,36 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@plugin "tailwind-scrollbar";
 
 @custom-variant dark (&:is(.dark *));
 
+@layer utilities {
+  .image-safe {
+    @apply relative inline-block;
+  }
+
+  .image-safe::after {
+    content: "";
+    @apply bg-transparent absolute top-0 left-0 w-full h-full pointer-events-auto z-30;
+  }
+
+  .text-safe {
+    @apply relative select-none;
+  }
+
+  .text-safe::after {
+    content: "";
+    @apply absolute top-0 left-0 w-full h-full bg-transparent pointer-events-auto z-30;
+  }
+}
+
 @theme inline {
+  --breakpoint-xs: 400px;
+  --breakpoint-xs1: 500px;
+  --breakpoint-md1: 825px;
+  --breakpoint-md2: 900px;
+
+  --color-contrast_color: var(--contrast_color);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
@@ -44,6 +71,7 @@
 }
 
 :root {
+  --contrast_color: oklch(56.971% 0.22522 29.155);
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
