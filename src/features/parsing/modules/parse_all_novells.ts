@@ -22,7 +22,6 @@ export async function parseAllNovels(page: Page, pageToImages: Page) {
       });
     });
     for (let i = 0; i < novels.length; i++) {
-      await page.waitForTimeout(5000);
       const novell = await createNovell({
         page,
         pageToImages,

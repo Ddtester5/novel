@@ -2,6 +2,7 @@ import { downloadImageForS3 } from "@/shared/lib/download_image_for_S3";
 import { transliterateToUrl } from "@/shared/lib/transliterate";
 import { Page } from "playwright";
 import { createTags } from "../seed/create_tags";
+import { sleep } from "@/shared/lib/sleep";
 
 export async function parseSingleNovell({
   page,
@@ -14,6 +15,7 @@ export async function parseSingleNovell({
 }) {
   // const tarsnslated_url = `${novell_url.replace(/www.69shuba.com/g, "www-69shuba-com.translate.goog")}?_x_tr_sl=zh-CN&_x_tr_tl=ru&_x_tr_hl=ru&_x_tr_pto=wapp`;
   await page.goto(novell_url);
+  await sleep(10000);
   await page.waitForSelector(".bookbox", {
     state: "visible",
     timeout: 60000,
