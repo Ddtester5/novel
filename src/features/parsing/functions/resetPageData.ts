@@ -25,9 +25,7 @@ export async function resetPageData(page: Page) {
     await page.evaluate(() => {
       try {
         indexedDB.databases().then((dbs) => {
-          dbs.forEach((db) =>
-            indexedDB.deleteDatabase(db.name!),
-          );
+          dbs.forEach((db) => indexedDB.deleteDatabase(db.name!));
         });
       } catch (error) {
         console.log("Нет доступа к indexedDB", error);
@@ -42,9 +40,6 @@ export async function resetPageData(page: Page) {
     });
     console.log("✅ Все данные страницы очищены!");
   } catch (error) {
-    console.log(
-      "Не удалось очистить данные страницы",
-      error,
-    );
+    console.log("Не удалось очистить данные страницы", error);
   }
 }

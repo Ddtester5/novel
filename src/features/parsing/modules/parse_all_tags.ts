@@ -8,13 +8,11 @@ export async function parseAllTags(page: Page) {
       state: "visible",
       timeout: 60000,
     });
-    const original_tags = await page
-      .locator("div.mybox > div.tag > ul > a")
-      .evaluateAll((e) => {
-        return e.map((el) => {
-          return `${el.textContent?.trim()}`;
-        });
+    const original_tags = await page.locator("div.mybox > div.tag > ul > a").evaluateAll((e) => {
+      return e.map((el) => {
+        return `${el.textContent?.trim()}`;
       });
+    });
 
     if (original_tags.length > 0) {
       await createTags(original_tags);

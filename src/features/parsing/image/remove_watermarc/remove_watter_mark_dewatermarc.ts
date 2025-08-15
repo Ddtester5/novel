@@ -10,14 +10,8 @@ export const removeWattermarkDewatermarck = async (
   textDelete: boolean,
 ): Promise<Buffer> => {
   try {
-    const tempFilePath = path.join(
-      os.tmpdir(),
-      `input_image.png`,
-    );
-    const tempDownloadPath = path.join(
-      os.tmpdir(),
-      "processed_image.png",
-    );
+    const tempFilePath = path.join(os.tmpdir(), `input_image.png`);
+    const tempDownloadPath = path.join(os.tmpdir(), "processed_image.png");
 
     fs.writeFileSync(tempFilePath, imageBuffer);
 
@@ -46,23 +40,16 @@ export const removeWattermarkDewatermarck = async (
     // console.log("input найден");
 
     // Устанавливаем файл
-    await page.setInputFiles(
-      inputFileSelector,
-      tempFilePath,
-    );
+    await page.setInputFiles(inputFileSelector, tempFilePath);
     // const inputFileValue = await page.locator(inputFileSelector).inputValue();
     // console.log("Загружен файл:", inputFileValue);
 
     // Ждем, пока изображение обработается
     await page.waitForTimeout(5000); // Ожидание 5 секунд для обработки
-    await page.waitForSelector(
-      "img[alt='enhanced-image']",
-      { timeout: 60000 },
-    );
+    await page.waitForSelector("img[alt='enhanced-image']", { timeout: 60000 });
     // console.log("Изображение обработано");
     if (textDelete) {
-      const textDeleteButtonSelector =
-        "button[role='switch']";
+      const textDeleteButtonSelector = "button[role='switch']";
       await page.waitForSelector(textDeleteButtonSelector, {
         timeout: 60000,
         state: "attached",
@@ -71,14 +58,10 @@ export const removeWattermarkDewatermarck = async (
       await simulateMouseMovement(page);
       await page.waitForTimeout(5000);
     }
-    await page.waitForSelector(
-      "img[alt='enhanced-image']",
-      { timeout: 60000 },
-    );
+    await page.waitForSelector("img[alt='enhanced-image']", { timeout: 60000 });
     await simulateMouseMovement(page);
     // Ожидаем появления кнопки для скачивания
-    const downloadButtonSelector =
-      "button:has-text('Download')";
+    const downloadButtonSelector = "button:has-text('Download')";
     await page.waitForSelector(downloadButtonSelector, {
       timeout: 60000,
     });
@@ -95,9 +78,7 @@ export const removeWattermarkDewatermarck = async (
     // console.log("Изображение без вотермарки сохранено");
     await simulateMouseMovement(page);
     // Читаем файл как Buffer
-    const processedImageBuffer = fs.readFileSync(
-      tempDownloadPath,
-    );
+    const processedImageBuffer = fs.readFileSync(tempDownloadPath);
     fs.unlinkSync(tempFilePath); // Удаляем временный файл с исходным изображением
     fs.unlinkSync(tempDownloadPath); // Удаляем временный файл с обработанным изображением
 

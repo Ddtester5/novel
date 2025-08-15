@@ -5,13 +5,8 @@ import path from "path";
 
 config();
 
-const {
-  MINIO_CONTAINER,
-  S3_IMAGES_BUCKET,
-  BACKUP_DIR,
-  MINIO_ROOT_USER,
-  MINIO_ROOT_PASSWORD,
-} = process.env;
+const { MINIO_CONTAINER, S3_IMAGES_BUCKET, BACKUP_DIR, MINIO_ROOT_USER, MINIO_ROOT_PASSWORD } =
+  process.env;
 
 if (
   !MINIO_CONTAINER ||
@@ -24,16 +19,10 @@ if (
   process.exit(1);
 }
 
-export const restoreLatestMinioBackup = (
-  backupPath?: string,
-) => {
+export const restoreLatestMinioBackup = (backupPath?: string) => {
   const files = fs
     .readdirSync(BACKUP_DIR)
-    .filter(
-      (file) =>
-        file.startsWith("minio_backup_") &&
-        file.endsWith(".tar.bz2"),
-    )
+    .filter((file) => file.startsWith("minio_backup_") && file.endsWith(".tar.bz2"))
     .sort()
     .reverse();
 
@@ -42,33 +31,22 @@ export const restoreLatestMinioBackup = (
     process.exit(1);
   }
 
-  const latestMinioBackup = path.join(
-    BACKUP_DIR,
-    backupPath ? backupPath : files[0],
-  );
+  const latestMinioBackup = path.join(BACKUP_DIR, backupPath ? backupPath : files[0]);
 
   try {
-    console.log(
-      `🔄 Восстановление из ${latestMinioBackup}...`,
-    );
+    console.log(`🔄 Восстановление из ${latestMinioBackup}...`);
 
     // Создаем директорию для восстановления
     const restoreDir = path.join(BACKUP_DIR, "restore");
     fs.mkdirSync(restoreDir, { recursive: true });
 
     // Разархивируем бэкап в созданную директорию
-    execSync(
-      `tar -xjf ${latestMinioBackup} -C ${restoreDir}`,
-      {
-        stdio: "inherit",
-      },
-    );
+    execSync(`tar -xjf ${latestMinioBackup} -C ${restoreDir}`, {
+      stdio: "inherit",
+    });
     const restorePath = path.join(
       restoreDir,
-      path.basename(
-        backupPath ? backupPath : files[0],
-        ".tar.bz2",
-      ),
+      path.basename(backupPath ? backupPath : files[0], ".tar.bz2"),
     );
     // Копируем данные с сервера в контейнер MinIO
     execSync(
@@ -84,12 +62,9 @@ export const restoreLatestMinioBackup = (
       { stdio: "inherit" },
     );
     fs.rmSync(restoreDir, { recursive: true, force: true });
-    execSync(
-      `docker exec ${MINIO_CONTAINER} rm -rf /tmp/`,
-      {
-        stdio: "inherit",
-      },
-    );
+    execSync(`docker exec ${MINIO_CONTAINER} rm -rf /tmp/`, {
+      stdio: "inherit",
+    });
     console.log("✅ Восстановление MinIO завершено!");
   } catch (error) {
     console.error("❌ Ошибка восстановления MinIO:", error);

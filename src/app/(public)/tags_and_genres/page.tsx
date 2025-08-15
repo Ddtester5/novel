@@ -13,10 +13,7 @@ export default async function TagsPage() {
       <div className="w-full h-full flex flex-wrap gap-6 p-6 border shadow-lg">
         {genres.map((genre) => {
           return (
-            <Link
-              key={genre.slug}
-              href={`/genres/${genre.slug}`}
-            >
+            <Link key={genre.slug} href={`/genres/${genre.slug}`}>
               <Badge>{genre.ru_title}</Badge>
             </Link>
           );

@@ -31,19 +31,15 @@ export async function createNovell({
         update: {},
         create: {
           ru_title: new_novell_info.genre,
-          slug: transliterateToUrl(
-            new_novell_info.genre.toLowerCase(),
-          ),
+          slug: transliterateToUrl(new_novell_info.genre.toLowerCase()),
         },
       });
       const new_novell = await dataBase.novells.create({
         data: {
-          url_to_all_chapters:
-            new_novell_info.url_to_all_chapters,
+          url_to_all_chapters: new_novell_info.url_to_all_chapters,
           image_path: new_novell_info.image_path,
           original_title: novell_original_title,
-          ru_description:
-            new_novell_info.novell_description,
+          ru_description: new_novell_info.novell_description,
           ru_title: new_novell_info.title,
           slug: new_novell_info.slug,
           genre: {
@@ -52,11 +48,9 @@ export async function createNovell({
             },
           },
           tags: {
-            connect: new_novell_info.tags.map(
-              (tag_title) => ({
-                ru_title: tag_title,
-              }),
-            ),
+            connect: new_novell_info.tags.map((tag_title) => ({
+              ru_title: tag_title,
+            })),
           },
         },
       });

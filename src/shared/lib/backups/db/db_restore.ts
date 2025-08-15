@@ -5,33 +5,17 @@ import path from "path";
 
 config();
 
-const {
-  POSTGRES_USER,
-  POSTGRES_DB,
-  POSTGRES_CONTAINER,
-  BACKUP_DIR,
-} = process.env;
+const { POSTGRES_USER, POSTGRES_DB, POSTGRES_CONTAINER, BACKUP_DIR } = process.env;
 
-if (
-  !POSTGRES_USER ||
-  !POSTGRES_DB ||
-  !POSTGRES_CONTAINER ||
-  !BACKUP_DIR
-) {
+if (!POSTGRES_USER || !POSTGRES_DB || !POSTGRES_CONTAINER || !BACKUP_DIR) {
   console.error("Не заданы переменные окружения!");
   process.exit(1);
 }
 
-export const restoreLatestBackup = (
-  backupPath?: string,
-) => {
+export const restoreLatestBackup = (backupPath?: string) => {
   const files = fs
     .readdirSync(BACKUP_DIR)
-    .filter(
-      (file) =>
-        file.startsWith("backup_") &&
-        file.endsWith(".dump.bz2"),
-    )
+    .filter((file) => file.startsWith("backup_") && file.endsWith(".dump.bz2"))
     .sort()
     .reverse();
   if (files.length === 0) {

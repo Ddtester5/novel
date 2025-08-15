@@ -53,20 +53,13 @@ const ERROR_PATTERNS = [
 ];
 
 const containsError = (response: string): boolean => {
-  return ERROR_PATTERNS.some((pattern) =>
-    response.toLowerCase().includes(pattern),
-  );
+  return ERROR_PATTERNS.some((pattern) => response.toLowerCase().includes(pattern));
 };
-const sleep = (ms: number) =>
-  new Promise((resolve) => setTimeout(resolve, ms));
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export const safeTranslate = async (
   text: string,
-  translateFunction: (
-    text: string,
-    context?: string,
-    temperature?: number,
-  ) => Promise<string>,
+  translateFunction: (text: string, context?: string, temperature?: number) => Promise<string>,
   context?: string,
   temperature?: number,
   retries: number = 50,
@@ -74,27 +67,16 @@ export const safeTranslate = async (
   for (let i = 0; i < retries; i++) {
     try {
       await sleep(5000);
-      const response = await translateFunction(
-        text,
-        context,
-        temperature,
-      ); // Упрощенный вызов
+      const response = await translateFunction(text, context, temperature); // Упрощенный вызов
       if (response && !containsError(response)) {
         return response;
       }
-      console.log(
-        `Попытка ${i + 1} не удалась, повторяем...`,
-      );
+      console.log(`Попытка ${i + 1} не удалась, повторяем...`);
     } catch (error) {
-      console.log(
-        `Ошибка перевода (попытка ${i + 1}):`,
-        error,
-      );
+      console.log(`Ошибка перевода (попытка ${i + 1}):`, error);
     }
     await sleep(1000); // Увеличиваем задержку между попытками
   }
-  console.log(
-    "Превышено количество попыток. Операция не выполнена.",
-  );
+  console.log("Превышено количество попыток. Операция не выполнена.");
   return "";
 };

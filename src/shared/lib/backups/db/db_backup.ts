@@ -5,19 +5,9 @@ import path from "path";
 
 config();
 
-const {
-  POSTGRES_USER,
-  POSTGRES_DB,
-  POSTGRES_CONTAINER,
-  BACKUP_DIR,
-} = process.env;
+const { POSTGRES_USER, POSTGRES_DB, POSTGRES_CONTAINER, BACKUP_DIR } = process.env;
 
-if (
-  !POSTGRES_USER ||
-  !POSTGRES_DB ||
-  !POSTGRES_CONTAINER ||
-  !BACKUP_DIR
-) {
+if (!POSTGRES_USER || !POSTGRES_DB || !POSTGRES_CONTAINER || !BACKUP_DIR) {
   console.error("Не заданы переменные окружения!");
   process.exit(1);
 }
@@ -31,10 +21,7 @@ fs.mkdirSync(`${BACKUP_DIR}/minio_old`, {
 
 export const createBackup = async () => {
   const date = new Date().toISOString();
-  const backupFile = path.join(
-    BACKUP_DIR,
-    `backup_${POSTGRES_DB}_${date}.dump.bz2`,
-  );
+  const backupFile = path.join(BACKUP_DIR, `backup_${POSTGRES_DB}_${date}.dump.bz2`);
 
   try {
     console.log(`Создание бэкапа ${backupFile}...`);

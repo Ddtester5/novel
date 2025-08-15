@@ -12,27 +12,17 @@ export const incriaseImageWithRetry = async (
 
   while (attempts < maxRetries) {
     try {
-      return await incriaseImageILoveImage(
-        imageBuffer,
-        page,
-      );
+      return await incriaseImageILoveImage(imageBuffer, page);
     } catch (error) {
       attempts++;
-      console.error(
-        `Ошибка при увеличении изображения (попытка ${attempts}):`,
-        error,
-      );
+      console.error(`Ошибка при увеличении изображения (попытка ${attempts}):`, error);
 
       if (attempts < maxRetries) {
-        console.log(
-          "Перезапуск Tor и повторная попытка...",
-        );
+        console.log("Перезапуск Tor и повторная попытка...");
         await restartTor();
         await resetPageData(page);
       } else {
-        console.log(
-          "Не удалось увеличить изображение после максимального количества попыток",
-        );
+        console.log("Не удалось увеличить изображение после максимального количества попыток");
       }
     }
   }

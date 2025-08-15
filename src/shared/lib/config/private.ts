@@ -14,7 +14,7 @@ const privateConfigSchema = z.object({
   NODE_ENV: z.string().optional(),
 
   SAIT_URL: z.string().optional(),
-  SAIT_NAME: z.string().optional(),
+  SAIT_NAME: z.string(),
   TOR_PROXY_PORT: z.string().optional(),
   TOR_CONTAINER_NAME: z.string().optional(),
   BACKUP_DIR: z.string().optional(),
@@ -33,6 +33,4 @@ const privateConfigSchema = z.object({
   MINIO_ROOT_PASSWORD: z.string().optional(),
 });
 
-export const privateConfig = privateConfigSchema.parse(
-  process.env,
-);
+export const privateConfig = privateConfigSchema.parse(process.env);

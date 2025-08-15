@@ -1,18 +1,10 @@
-import {
-  Browser,
-  BrowserContext,
-  chromium,
-  Page,
-} from "playwright";
+import { Browser, BrowserContext, chromium, Page } from "playwright";
 import { addHTTPheaders } from "./functions/addHttpHeader";
 import { parseAllNovels } from "./modules/parse_all_novells";
 
 export async function startParse() {
   const timeoutPromise = new Promise((_, rej) => {
-    setTimeout(
-      () => rej(new Error("Время парсинга новелл вышло")),
-      5 * 60 * 60 * 1000,
-    );
+    setTimeout(() => rej(new Error("Время парсинга новелл вышло")), 5 * 60 * 60 * 1000);
   });
   try {
     Promise.race([exeParse(), timeoutPromise]);
@@ -30,7 +22,7 @@ export async function exeParse() {
   let contextToImages: BrowserContext | undefined;
   try {
     browser = await chromium.launch({ headless: true });
-    const data = await addHTTPheaders(browser, true);
+    const data = await addHTTPheaders(browser, false);
     page = data.page;
     pageToImages = data.pageToImages;
     context = data.context;
@@ -41,23 +33,23 @@ export async function exeParse() {
     console.error("Parsing Error", error);
   } finally {
     if (page) {
-      page.close();
+      await page.close();
       console.log("page closed");
     }
     if (pageToImages) {
-      pageToImages.close();
+      await pageToImages.close();
       console.log("pageToImages closed");
     }
     if (context) {
-      context.close();
+      await context.close();
       console.log("context closed");
     }
     if (contextToImages) {
-      contextToImages.close();
+      await contextToImages.close();
       console.log("contextToImages closed");
     }
     if (browser) {
-      browser.close();
+      await browser.close();
       console.log("browser closed");
     }
   }

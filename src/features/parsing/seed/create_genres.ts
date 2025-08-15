@@ -36,15 +36,8 @@ export async function createGenres(genres: string[]) {
         .trim()
         .split(",");
       for (let i = 0; i < new_genres.length; i++) {
-        const new_genre = await createGenre(
-          new_genres[i],
-          parsed_ru_titles[i],
-        );
-        console.log(
-          "created genre",
-          new_genre?.original_title,
-          new_genre?.ru_title,
-        );
+        const new_genre = await createGenre(new_genres[i], parsed_ru_titles[i]);
+        console.log("created genre", new_genre?.original_title, new_genre?.ru_title);
       }
     }
   } catch (error) {
