@@ -24,8 +24,8 @@ export const mainNavItems: NavItems[] = [
     name: "Тэги",
     path: "/tags",
   },
-  // {
-  //   name: "Сравнение моделей",
-  //   path: "/compare",
-  // },
+  {
+    name: "Новые главы",
+    path: "/new_chaprers",
+  },
 ];

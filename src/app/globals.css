@@ -71,7 +71,7 @@
 }
 
 :root {
-  --contrast_color: oklch(56.971% 0.22522 29.155);
+  --contrast_color: oklch(62.448% 0.21719 29.645);
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);

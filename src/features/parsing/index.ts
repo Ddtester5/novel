@@ -22,7 +22,7 @@ export async function exeParse() {
   let contextToImages: BrowserContext | undefined;
   try {
     browser = await chromium.launch({ headless: true });
-    const data = await addHTTPheaders(browser, true);
+    const data = await addHTTPheaders(browser, false);
     page = data.page;
     pageToImages = data.pageToImages;
     context = data.context;

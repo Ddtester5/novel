@@ -11,7 +11,7 @@ export async function parseAllChapters(page: Page, url_to_all_chapters: string, 
       state: "visible",
       timeout: 60000,
     });
-    await sleep(5000);
+    await sleep(10000);
     const chapters = await page.locator("div.catalog > ul > li").evaluateAll((e) => {
       return e.map((el) => {
         return {
