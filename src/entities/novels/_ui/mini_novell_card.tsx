@@ -17,7 +17,7 @@ export function MiniNovellCard({
   chapters_count: number;
 }) {
   return (
-    <Link href={`/novell/${slug}`}>
+    <Link href={`/novells/${slug}`}>
       <Card className="w-[100px] md:w-[140px] flex-shrink-0 p-0 gap-2 border-2 rounded">
         <CardContent className="p-0 image-safe relative">
           <div className="aspect-[2/2.7] relative ">
