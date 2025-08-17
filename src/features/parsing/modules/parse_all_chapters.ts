@@ -13,7 +13,7 @@ export async function parseAllChapters(page: Page, url_to_all_chapters: string, 
     const chapters = await page.locator("div.catalog > ul > li").evaluateAll((e) => {
       return e.map((el) => {
         return {
-          number: `${el.getAttribute("data-num")}`,
+          number: Number(`${el.getAttribute("data-num")?.trim()}`),
           // title: `${el.textContent?.trim()}`,
           url: `${el.querySelector("a")?.getAttribute("href")}`,
         };
@@ -26,7 +26,7 @@ export async function parseAllChapters(page: Page, url_to_all_chapters: string, 
       },
     });
     const existing_nums = existing_chapters.map((e) => e.chapter_number);
-    const new_chapters = chapters.filter((e) => !existing_nums.includes(e.number));
+    const new_chapters = chapters.filter((e) => !existing_nums.includes(Number(e.number)));
     for (const new_chapter of new_chapters) {
       if (new_chapter.url === "#") {
         continue;

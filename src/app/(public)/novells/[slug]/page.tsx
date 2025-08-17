@@ -1,10 +1,18 @@
 import { getSingleNovellBySlug } from "@/entities/novels/_actons/get_single_novell_by_slug";
-import { TagBage } from "@/entities/tags/_ui/tag_bage";
+import { getChaptersDeclension } from "@/entities/novels/_fn/get_chapters_declension";
+import { NovellChapterList } from "@/entities/novels/_ui/novell_chapters_list";
+import { Title } from "@/shared/components/custom/app-title";
 import { TimeAgo } from "@/shared/components/custom/get-time";
-import { Card, CardContent, CardHeader } from "@/shared/components/ui/card";
+
+import { Badge } from "@/shared/components/ui/badge";
+import { Button } from "@/shared/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/components/ui/tabs";
+
 import { privateConfig } from "@/shared/lib/config/private";
+import { BookOpen, Calendar } from "lucide-react";
 import { Metadata } from "next";
 import Image from "next/image";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 
 export async function generateMetadata({
@@ -50,62 +58,98 @@ export async function generateMetadata({
   };
 }
 
-export default async function NovellPage({ params }: { params: Promise<{ slug: string }> }) {
-  const pageParams = await params;
-  const novell = await getSingleNovellBySlug(pageParams.slug);
-  if (!novell) {
-    return (
-      <div className="text-center py-10 text-foreground">
-        Не удалось получить информацию о новелле
-      </div>
-    );
-  }
+export const revalidate = 60; // ISR на 1 минуту
+
+export default async function NovellPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+  searchParams: { sort?: "asc" | "desc" };
+}) {
+  const page_params = await params;
+
+  const novell = await getSingleNovellBySlug(page_params.slug);
+
+  if (!novell) return notFound();
 
   return (
-    <main className="flex flex-col flex-1 gap-2 md:gap-4">
-      <Card className="w-full mx-auto p-2 gap-2">
-        <CardHeader className="p-2">
-          <h1 className="lg:text-xl text-base lg:font-bold font-semibold">{novell.ru_title}</h1>
-          <div className="md:text-base text-sm flex flex-col  justify-between items-start sm:items-center text-foreground/80">
-            <div className="text-xs w-full mt-1.5 flex flex-row items-center justify-between ">
-              <TimeAgo date={novell.created_at} />
-              {/* <BookmarksButton id={post.id} type="NEWS" /> */}
+    <div className="lg:col-span-2 space-y-4">
+      {/* Novel Header */}
+      <div className="flex flex-col xs1:flex-row gap-6">
+        <div className="flex-shrink-0 flex items-center justify-center">
+          <div className="relative w-48 h-64 mx-auto xs1:mx-0  image-safe">
+            <Image
+              src={novell.image_path || "/placeholder.png"}
+              alt={novell.ru_title}
+              fill
+              className="object-cover rounded-lg shadow-lg"
+            />
+          </div>
+        </div>
+
+        <div className="flex-1 space-y-4">
+          <Title className="text-start" size="xl" text={novell.ru_title} />
+
+          {/* Stats */}
+          <div className="flex flex-wrap gap-4 text-sm">
+            <div className="flex items-center gap-1">
+              <BookOpen className="h-4 w-4 text-muted-foreground" />
+              <span className="font-medium">{novell.chapters.length}</span>
+              <span className="text-muted-foreground">
+                {getChaptersDeclension(novell.chapters.length)}
+              </span>
             </div>
-            <div className="items-start w-full flex flex-wrap gap-2">
-              {novell?.tags.map((tag) => (
-                <TagBage key={tag.slug} slug={tag.slug} title={tag.ru_title} />
+            <div className="flex items-center gap-1">
+              <Calendar className="h-4 w-4 text-muted-foreground" />
+              <span className="text-muted-foreground">
+                <span className="font-medium">Обновлено: </span>
+                <TimeAgo date={novell.created_at} />
+              </span>
+            </div>
+          </div>
+
+          {/* Status and Genres */}
+          <div className="space-y-3">
+            <div className="flex flex-wrap gap-2">
+              <Badge variant="outline">{novell.genre?.ru_title}</Badge>
+            </div>
+
+            <div className="flex flex-wrap gap-2">
+              {novell.tags.map((tag) => (
+                <Badge key={tag.id} variant="secondary" className="text-xs">
+                  {tag.ru_title}
+                </Badge>
               ))}
             </div>
           </div>
-        </CardHeader>
-        <CardContent className="p-2">
-          {novell.image_path && (
-            <Image
-              width={160}
-              height={280}
-              src={novell.image_path}
-              alt={`Картинка новеллы ${novell.ru_title}`}
-            />
-          )}
-          {novell.chapters &&
-            novell.chapters.map((e) => {
-              return (
-                <div
-                  key={e.id}
-                  className="flex items-center justify-between gap-2 bg-amber-500 fill-gray-200 p-2"
-                >
-                  <span className="p-2">{e.chapter_number}</span>
-                  <span className="p-2">{e.title}</span>
-                  <TimeAgo className="p-2" date={e.created_at} />
-                </div>
-              );
-            })}
-        </CardContent>
-      </Card>
-      {/* <div className="flex flex-row gap-4  justify-between items-center ">
-        <Title size="lg" text="Похожие новости" />
+
+          {/* Action Buttons */}
+          <div className="flex gap-3 pt-2">
+            {novell.chapters.length > 0 && (
+              <Link href={`/novel/${novell.id}/chapter/1`}>
+                <Button className="bg-primary text-primary-foreground hover:bg-primary/90">
+                  Читать
+                </Button>
+              </Link>
+            )}
+            <Button variant="outline">В закладки</Button>
+          </div>
+        </div>
       </div>
-      <SomePosts slug={pageParams.slug} count={20} type="NEWS" tags={post.tags} /> */}
-    </main>
+
+      {/* Description */}
+      <Tabs defaultValue="chapters">
+        <TabsList className="justify-between">
+          <TabsTrigger value="chapters">Список глав</TabsTrigger>
+          <TabsTrigger value="description">Описание</TabsTrigger>
+        </TabsList>
+        <TabsContent className="text-justify indent-3 whitespace-pre-wrap" value="description">
+          {novell.ru_description}
+        </TabsContent>
+        <TabsContent value="chapters">
+          <NovellChapterList novell={novell} />
+        </TabsContent>
+      </Tabs>
+    </div>
   );
 }

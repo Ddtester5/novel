@@ -7,7 +7,7 @@ import { sleep } from "@/shared/lib/sleep";
 export async function parseChapter(
   page: Page,
   new_chapter: {
-    number: string;
+    number: number;
     // title: string;
     url: string;
   },

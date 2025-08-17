@@ -3,7 +3,15 @@
 import { cn } from "@/shared/lib/utils";
 import { useEffect, useState } from "react";
 
-export const TimeAgo = ({ date, className }: { date: Date; className?: string }) => {
+export const TimeAgo = ({
+  date,
+  className,
+  locale = "ru-RU", // можно менять локаль
+}: {
+  date: Date | string;
+  className?: string;
+  locale?: string;
+}) => {
   const [currentTime, setCurrentTime] = useState<Date | null>(null);
 
   useEffect(() => {
@@ -15,50 +23,37 @@ export const TimeAgo = ({ date, className }: { date: Date; className?: string })
   }, []);
 
   if (!currentTime) {
-    return <span>Загрузка...</span>; // Показываем текст, пока не загрузилось текущее время
+    return <span>Загрузка...</span>;
   }
-  const timeDiff = currentTime.getTime() - new Date(date).getTime();
-  const seconds = Math.floor(timeDiff / 1000);
+
+  const d = new Date(date);
+  const diffMs = currentTime.getTime() - d.getTime();
+  const seconds = Math.floor(diffMs / 1000);
   const minutes = Math.floor(seconds / 60);
   const hours = Math.floor(minutes / 60);
   const days = Math.floor(hours / 24);
 
+  const rtf = new Intl.RelativeTimeFormat(locale, { numeric: "auto" });
+
   if (days >= 1) {
-    // Если прошло более 24 часов, показываем дату в формате день/месяц/год
-    const day = date.getDate();
-    const month = date.getMonth() + 1; // Месяцы начинаются с 0
-    const year = date.getFullYear();
+    // Если прошло более 24ч — выводим дату
     return (
-      <span className={cn(className, "text-sm")}>{`${day < 10 ? `0${day}` : day}/${
-        month < 10 ? `0${month}` : month
-      }/${year}`}</span>
+      <span className={cn(className, "text-sm")}>
+        {d.toLocaleDateString(locale, {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+        })}
+      </span>
     );
   }
 
   if (hours >= 1) {
-    // Если прошло меньше 24 часов, показываем количество часов назад
-    if (hours >= 2 && hours <= 4) {
-      return <span>{`${hours} часа назад`}</span>;
-    }
-    if (hours >= 22 && hours <= 24) {
-      return <span>{`${hours} часа назад`}</span>;
-    }
-    return <span>{`${hours} час${hours > 1 ? "ов" : ""} назад`}</span>;
+    return <span>{rtf.format(-hours, "hour")}</span>;
   }
 
   if (minutes >= 1) {
-    // Если прошло меньше часа, показываем количество минут назад
-    if (minutes === 1) {
-      return <span>{`${minutes} минуту назад`}</span>;
-    }
-    if (minutes >= 2 && minutes <= 4) {
-      return <span>{`${minutes} минуты назад`}</span>;
-    }
-    if (minutes === 21 || minutes === 31 || minutes === 41 || minutes === 51) {
-      return <span>{`${minutes} минуту назад`}</span>;
-    }
-
-    return <span>{`${minutes} минут назад`}</span>;
+    return <span>{rtf.format(-minutes, "minute")}</span>;
   }
 
   return <span>Только что</span>;
