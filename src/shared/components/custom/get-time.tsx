@@ -2,6 +2,7 @@
 
 import { cn } from "@/shared/lib/utils";
 import { useEffect, useState } from "react";
+import { Skeleton } from "../ui/skeleton";
 
 export const TimeAgo = ({
   date,
@@ -23,7 +24,7 @@ export const TimeAgo = ({
   }, []);
 
   if (!currentTime) {
-    return <span>Загрузка...</span>;
+    return <Skeleton className="w-20 h-3 inline-block" />;
   }
 
   const d = new Date(date);

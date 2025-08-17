@@ -1,6 +1,7 @@
 import { getSingleNovellBySlug } from "@/entities/novels/_actons/get_single_novell_by_slug";
 import { getChaptersDeclension } from "@/entities/novels/_fn/get_chapters_declension";
 import { NovellChapterList } from "@/entities/novels/_ui/novell_chapters_list";
+import { TagBage } from "@/entities/tags/_ui/tag_bage";
 import { Title } from "@/shared/components/custom/app-title";
 import { TimeAgo } from "@/shared/components/custom/get-time";
 
@@ -92,7 +93,7 @@ export default async function NovellPage({
 
           {/* Stats */}
           <div className="flex flex-wrap gap-4 text-sm">
-            <div className="flex items-center gap-1">
+            <div className="flex items-center justify-center gap-1">
               <BookOpen className="h-4 w-4 text-muted-foreground" />
               <span className="font-medium">{novell.chapters.length}</span>
               <span className="text-muted-foreground">
@@ -111,14 +112,14 @@ export default async function NovellPage({
           {/* Status and Genres */}
           <div className="space-y-3">
             <div className="flex flex-wrap gap-2">
-              <Badge variant="outline">{novell.genre?.ru_title}</Badge>
+              <Badge className="text-xs" variant="outline">
+                {novell.genre?.ru_title}
+              </Badge>
             </div>
 
             <div className="flex flex-wrap gap-2">
               {novell.tags.map((tag) => (
-                <Badge key={tag.id} variant="secondary" className="text-xs">
-                  {tag.ru_title}
-                </Badge>
+                <TagBage key={tag.id} title={tag.ru_title} slug={tag.slug} />
               ))}
             </div>
           </div>
@@ -127,21 +128,27 @@ export default async function NovellPage({
           <div className="flex gap-3 pt-2">
             {novell.chapters.length > 0 && (
               <Link href={`/novel/${novell.id}/chapter/1`}>
-                <Button className="bg-primary text-primary-foreground hover:bg-primary/90">
+                <Button className="bg-primary text-primary-foreground hover:bg-primary/90 cursor-pointer">
                   Читать
                 </Button>
               </Link>
             )}
-            <Button variant="outline">В закладки</Button>
+            <Button className="cursor-pointer" variant="outline">
+              В закладки
+            </Button>
           </div>
         </div>
       </div>
 
       {/* Description */}
       <Tabs defaultValue="chapters">
-        <TabsList className="justify-between">
-          <TabsTrigger value="chapters">Список глав</TabsTrigger>
-          <TabsTrigger value="description">Описание</TabsTrigger>
+        <TabsList className="justify-between w-full">
+          <TabsTrigger className="cursor-pointer " value="chapters">
+            Список глав
+          </TabsTrigger>
+          <TabsTrigger className="cursor-pointer " value="description">
+            Описание
+          </TabsTrigger>
         </TabsList>
         <TabsContent className="text-justify indent-3 whitespace-pre-wrap" value="description">
           {novell.ru_description}

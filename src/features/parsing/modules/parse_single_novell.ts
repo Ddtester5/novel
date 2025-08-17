@@ -59,7 +59,10 @@ export async function parseSingleNovell({
     tags: parsed_tags,
     title: novell_title_ru,
     novell_description: textEditor.limitSpaces(
-      textEditor.removeAfterKeyword(novell_description, "Ключевые слова романа"),
+      textEditor.removeAfterKeyword(
+        textEditor.removeAfterKeyword(novell_description, "Ключевые слова "),
+        "Новые ключевые",
+      ),
       3,
     ),
     url_to_all_chapters,
