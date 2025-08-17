@@ -8,7 +8,7 @@ export async function createChapter({
 }: {
   content: string;
   title: string;
-  number: string;
+  number: number;
   novell_id: string;
 }) {
   console.log({
@@ -24,6 +24,12 @@ export async function createChapter({
         chapter_number: number,
         content: content,
         title: title,
+      },
+    });
+    await dataBase.novells.update({
+      where: { id: novell_id },
+      data: {
+        updated_at: new Date(),
       },
     });
   } catch (error) {

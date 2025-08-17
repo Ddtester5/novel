@@ -3,11 +3,12 @@ import { cleanHiddenCharacters } from "@/shared/lib/openai/translate/cleane_text
 import { Page } from "playwright";
 import { createChapter } from "../seed/create_chapter";
 import { sleep } from "@/shared/lib/sleep";
+import { textEditor } from "@/shared/lib/text_editor";
 
 export async function parseChapter(
   page: Page,
   new_chapter: {
-    number: string;
+    number: number;
     // title: string;
     url: string;
   },
@@ -21,10 +22,13 @@ export async function parseChapter(
     });
     await sleep(5000);
     const title = (await page.locator("div.txtnav > font ").nth(0).textContent())?.trim() || "";
-    const content = (await page.locator("div.txtnav ").textContent()) || "";
+    const content = (await page.locator("div.txtnav ").textContent())?.trim() || "";
     console.log(title);
     await createChapter({
-      content: cleanHiddenCharacters(cleaneText(content)),
+      content: textEditor.removeAfterKeyword(
+        cleanHiddenCharacters(cleaneText(content)),
+        "(Конец главы)",
+      ),
       title: title,
       number: new_chapter.number,
       novell_id: novell_id,

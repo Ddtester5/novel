@@ -3,6 +3,7 @@ import { transliterateToUrl } from "@/shared/lib/transliterate";
 import { Page } from "playwright";
 import { createTags } from "../seed/create_tags";
 import { sleep } from "@/shared/lib/sleep";
+import { textEditor } from "@/shared/lib/text_editor";
 
 export async function parseSingleNovell({
   page,
@@ -27,7 +28,7 @@ export async function parseSingleNovell({
       };
     });
   });
-  const novell_title_ru = await page.locator("h1").innerText();
+  const novell_title_ru = (await page.locator("h1").innerText()).trim();
   const tags = await page.locator("ul.tagul > a").evaluateAll((e) => {
     return e.map((el) => {
       return el.textContent?.trim() || "";
@@ -36,7 +37,7 @@ export async function parseSingleNovell({
   const parsed_tags = tags.map((e) => {
     return e.toLowerCase().replace(/поток/gi, "").trim();
   });
-  const novell_description = await page.locator("div.navtxt").innerText();
+  const novell_description = (await page.locator("div.navtxt").innerText()).trim();
 
   const url_to_all_chapters = (await page.locator("a.more-btn").getAttribute("href")) as string;
   const img_url = (await page.locator("div.bookimg2 > img").getAttribute("src")) as string;
@@ -57,7 +58,13 @@ export async function parseSingleNovell({
     genre: novell[0].novell_genre,
     tags: parsed_tags,
     title: novell_title_ru,
-    novell_description: novell_description,
+    novell_description: textEditor.limitSpaces(
+      textEditor.removeAfterKeyword(
+        textEditor.removeAfterKeyword(novell_description, "Ключевые слова "),
+        "Новые ключевые",
+      ),
+      3,
+    ),
     url_to_all_chapters,
     slug: slug,
     image_path: image_path as string,
