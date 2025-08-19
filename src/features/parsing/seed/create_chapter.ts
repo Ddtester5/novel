@@ -4,30 +4,30 @@ export async function createChapter({
   content,
   title,
   number,
-  novell_id,
+  novell_slug,
 }: {
   content: string;
   title: string;
   number: number;
-  novell_id: string;
+  novell_slug: string;
 }) {
   console.log({
     content,
     title,
     number,
-    novell_id,
+    novell_slug,
   });
   try {
     await dataBase.chapters.create({
       data: {
-        novell_id: novell_id,
+        novell_slug: novell_slug,
         chapter_number: number,
         content: content,
         title: title,
       },
     });
     await dataBase.novells.update({
-      where: { id: novell_id },
+      where: { slug: novell_slug },
       data: {
         updated_at: new Date(),
       },

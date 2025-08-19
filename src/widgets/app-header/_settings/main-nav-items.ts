@@ -9,23 +9,11 @@ export const mainNavItems: NavItems[] = [
     path: "/",
   },
   {
+    name: "Поиск",
+    path: "/seaarch",
+  },
+  {
     name: "Рейтинги",
-    path: "/news",
-  },
-  {
-    name: "Новинки",
-    path: "/reviews",
-  },
-  {
-    name: "Жанры",
-    path: "/brands",
-  },
-  {
-    name: "Тэги",
-    path: "/tags",
-  },
-  {
-    name: "Новые главы",
-    path: "/new_chaprers",
+    path: "/rating",
   },
 ];

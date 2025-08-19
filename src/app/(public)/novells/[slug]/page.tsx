@@ -61,12 +61,7 @@ export async function generateMetadata({
 
 export const revalidate = 60; // ISR на 1 минуту
 
-export default async function NovellPage({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-  searchParams: { sort?: "asc" | "desc" };
-}) {
+export default async function NovellPage({ params }: { params: Promise<{ slug: string }> }) {
   const page_params = await params;
 
   const novell = await getSingleNovellBySlug(page_params.slug);

@@ -2,7 +2,11 @@ import { dataBase } from "@/shared/lib/db_connect";
 import { Page } from "playwright";
 import { parseChapter } from "./parse_chapter";
 
-export async function parseAllChapters(page: Page, url_to_all_chapters: string, novell_id: string) {
+export async function parseAllChapters(
+  page: Page,
+  url_to_all_chapters: string,
+  novell_slug: string,
+) {
   try {
     await page.goto(url_to_all_chapters);
 
@@ -22,7 +26,7 @@ export async function parseAllChapters(page: Page, url_to_all_chapters: string, 
 
     const existing_chapters = await dataBase.chapters.findMany({
       where: {
-        novell_id: novell_id,
+        novell_slug: novell_slug,
       },
     });
     const existing_nums = existing_chapters.map((e) => e.chapter_number);
@@ -31,8 +35,8 @@ export async function parseAllChapters(page: Page, url_to_all_chapters: string, 
       if (new_chapter.url === "#") {
         continue;
       }
-      await page.waitForTimeout(5000);
-      await parseChapter(page, new_chapter, novell_id);
+
+      await parseChapter(page, new_chapter, novell_slug);
     }
   } catch (error) {
     console.error("parse all chapters error", error);

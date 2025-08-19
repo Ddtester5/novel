@@ -6,11 +6,9 @@ export function TagBage({ slug, title }: { slug: string; title: string }) {
   return (
     <Badge
       key={slug}
-      className="h-6 bg-contrast_color/80 transition-colors duration-300  hover:bg-slate-950/80 text-slate-50 text-xs font-medium px-2 py-1 z-40 "
+      className=" bg-contrast_color/80 transition-colors duration-300  hover:bg-slate-950/80 text-slate-50 text-xs font-medium px-2 py-1 z-40 "
     >
-      <Link className="items-center" href={`/tags/${slug}`}>
-        {title}
-      </Link>
+      <Link href={`/tags/${slug}`}>{title}</Link>
     </Badge>
   );
 }

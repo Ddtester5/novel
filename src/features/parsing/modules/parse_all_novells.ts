@@ -28,7 +28,7 @@ export async function parseAllNovels(page: Page, pageToImages: Page) {
         ...novels[i],
       });
 
-      await parseAllChapters(page, novell?.url_to_all_chapters as string, novell?.id as string);
+      await parseAllChapters(page, novell?.url_to_all_chapters as string, novell?.slug as string);
     }
   } catch (error) {
     console.error("error parse all novels", error);

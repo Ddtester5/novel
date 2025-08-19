@@ -65,12 +65,14 @@ model Chapters {
   updated_at DateTime @updatedAt
 
   chapter_number Int
+  cleane_number  Int
 
   title   String
   content String
 
-  novells   Novells @relation(fields: [novell_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  novell_id String
+  novells     Novells @relation(fields: [novell_slug], references: [slug], onDelete: Cascade, onUpdate: Cascade)
+  novell_slug String
 
+  @@unique([novell_slug, chapter_number])
   @@map("chapters")
 }

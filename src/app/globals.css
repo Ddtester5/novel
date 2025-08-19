@@ -141,10 +141,36 @@
 }
 
 @layer base {
+  html {
+    scrollbar-gutter: stable;
+  }
   * {
     @apply border-border outline-ring/50;
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+.prose {
+  @apply max-w-none  leading-relaxed text-foreground;
+
+  h2 {
+    @apply text-base lg:text-lg font-medium mt-2 lg:mt-4 border-b-2 border-foreground/40;
+  }
+
+  p {
+    @apply indent-3 lg:indent-6 text-justify text-sm lg:text-base text-foreground/80;
+
+    b {
+      @apply text-sm lg:text-base text-foreground;
+    }
+  }
+
+  a {
+    @apply text-foreground/80 no-underline;
+
+    &:hover {
+      @apply underline;
+    }
   }
 }

@@ -58,13 +58,11 @@ export async function parseSingleNovell({
     genre: novell[0].novell_genre,
     tags: parsed_tags,
     title: novell_title_ru,
-    novell_description: textEditor.limitSpaces(
-      textEditor.removeAfterKeyword(
-        textEditor.removeAfterKeyword(novell_description, "Ключевые слова "),
-        "Новые ключевые",
-      ),
-      3,
+    novell_description: textEditor.removeAfterKeyword(
+      textEditor.removeAfterKeyword(novell_description, "Ключевые слова "),
+      "Новые ключевые",
     ),
+
     url_to_all_chapters,
     slug: slug,
     image_path: image_path as string,
