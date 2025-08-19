@@ -49,14 +49,10 @@ export async function parseSingleNovell({
         .replace(/dir="auto"/g, "")
         .replace(/style="vertical-align: inherit;"/g, "")
         .replace(/<br>/g, "")
-        .replace(/&emsp;&emsp;/g, "")
+        .replace(/\s*&emsp;\s*/g, "")
         .replace(/\u2003+/g, "")
-        .replace(/ &emsp;&emsp; /g, "")
-        .replace(/ &emsp;&emsp; /g, "")
         .replace(/<p\s*>\s*<\/p>/g, "")
-        .replace(/<p  ><p  >/g, "<p>")
-        .replace(/<p ><p >/g, "<p>")
-        .replace(/<p><p>/g, "<p>")
+        .replace(/<p\s*><p\s*>/g, "<p>")
         .replace(/<\/p><\/p>/g, "</p>")
         .trim(),
       "Ключевые слова ",

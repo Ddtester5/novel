@@ -65,7 +65,7 @@ model Chapters {
   updated_at DateTime @updatedAt
 
   chapter_number Int
-  cleane_number  Int
+  cleane_number  Int?
 
   title   String
   content String

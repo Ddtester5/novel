@@ -42,10 +42,11 @@ CREATE TABLE "chapters" (
     "id" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
-    "chapter_number" TEXT NOT NULL,
+    "chapter_number" INTEGER NOT NULL,
+    "cleane_number" INTEGER,
     "title" TEXT NOT NULL,
     "content" TEXT NOT NULL,
-    "novell_id" TEXT NOT NULL,
+    "novell_slug" TEXT NOT NULL,
 
     CONSTRAINT "chapters_pkey" PRIMARY KEY ("id")
 );
@@ -80,13 +81,16 @@ CREATE UNIQUE INDEX "tags_ru_title_key" ON "tags"("ru_title");
 CREATE UNIQUE INDEX "tags_slug_key" ON "tags"("slug");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "chapters_novell_slug_chapter_number_key" ON "chapters"("novell_slug", "chapter_number");
+
+-- CreateIndex
 CREATE INDEX "_NovellsToTags_B_index" ON "_NovellsToTags"("B");
 
 -- AddForeignKey
 ALTER TABLE "novells" ADD CONSTRAINT "novells_genre_id_fkey" FOREIGN KEY ("genre_id") REFERENCES "genres"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "chapters" ADD CONSTRAINT "chapters_novell_id_fkey" FOREIGN KEY ("novell_id") REFERENCES "novells"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "chapters" ADD CONSTRAINT "chapters_novell_slug_fkey" FOREIGN KEY ("novell_slug") REFERENCES "novells"("slug") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_NovellsToTags" ADD CONSTRAINT "_NovellsToTags_A_fkey" FOREIGN KEY ("A") REFERENCES "novells"("id") ON DELETE CASCADE ON UPDATE CASCADE;

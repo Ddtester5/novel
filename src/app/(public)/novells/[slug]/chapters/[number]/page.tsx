@@ -33,11 +33,15 @@ export default async function ChapterPage({ params }: ChapterPageProps) {
     <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-3">
+        <div className=" px-2 py-2">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <Link href={`/novells/${novell_slug}`}>
-                <Button variant="ghost" size="sm" className="flex items-center gap-2">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="flex items-center gap-2 cursor-pointer"
+                >
                   <ArrowLeft className="h-4 w-4" />К оглавлению
                 </Button>
               </Link>
@@ -52,8 +56,8 @@ export default async function ChapterPage({ params }: ChapterPageProps) {
 
       <main>
         {/* Chapter Header */}
-        <div className="text-center mb-8">
-          <div className="flex items-center justify-center gap-4 text-sm text-muted-foreground">
+        <div className=" mb-2 p-2">
+          <div className="flex  flex-row  gap-2 text-sm text-muted-foreground">
             <span>Глава {chapter_number}</span>
             <Separator orientation="vertical" />
             <span>
@@ -64,7 +68,7 @@ export default async function ChapterPage({ params }: ChapterPageProps) {
         </div>
 
         {/* Chapter Content */}
-        <Card className="bg-card border-border ">
+        <Card className="bg-card border-border py-2">
           <CardContent className="p-2 ">
             <div
               className="prose text-card-foreground "

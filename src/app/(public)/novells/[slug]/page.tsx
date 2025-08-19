@@ -145,8 +145,8 @@ export default async function NovellPage({ params }: { params: Promise<{ slug: s
             Описание
           </TabsTrigger>
         </TabsList>
-        <TabsContent className="text-justify indent-3 whitespace-pre-wrap" value="description">
-          {novell.ru_description}
+        <TabsContent className="text-justify " value="description">
+          <div className="prose " dangerouslySetInnerHTML={{ __html: novell.ru_description }} />
         </TabsContent>
         <TabsContent value="chapters">
           <NovellChapterList novell={novell} />
