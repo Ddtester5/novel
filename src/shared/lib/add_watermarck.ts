@@ -60,18 +60,18 @@ export const replaceWatermarkWithSharp = async (imageBuffer: Buffer, replacement
             <svg width="${regionWidth}" height="${regionHeight}" xmlns="http://www.w3.org/2000/svg">
               <defs>
                 <filter id="textShadow" x="0" y="0" width="200%" height="200%">
-                  <feDropShadow dx="3" dy="3" stdDeviation="3" flood-color="rgba(41, 2, 31, 0.7)" />
+                  <feDropShadow dx="3" dy="3" stdDeviation="3" flood-color="rgba(183, 0, 47, 0.7)" />
                 </filter>
                 <radialGradient id="grad" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
-                  <stop offset="40%" style="stop-color:rgb(160, 22, 137);stop-opacity:0.65" />
-                  <stop offset="80%" style="stop-color:rgb(160, 22, 137);stop-opacity:0.3" />
+                  <stop offset="40%" style="stop-color:rgb(238, 59, 43);stop-opacity:0.65" />
+                  <stop offset="80%" style="stop-color:rgb(238, 59, 43);stop-opacity:0.3" />
                   <stop offset="100%" style="stop-color:rgb(160, 22, 137);stop-opacity:0" />
                 </radialGradient>
               </defs>
               <rect x="0" y="0" width="${regionWidth}" height="${regionHeight}" fill="url(#grad)" />
               <text 
                 x="${regionWidth / 2}" 
-                y="${regionHeight / 1.6}" 
+                y="${regionHeight / 1.8}" 
                 font-size="${fontSize}" 
                 fill="rgba(255, 255, 255, 0.9)" 
                 font-weight="700" 

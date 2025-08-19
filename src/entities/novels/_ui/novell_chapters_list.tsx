@@ -1,20 +1,13 @@
 "use client";
 
 import { getSinglePostBySlugType } from "../_actons/get_single_novell_by_slug";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/shared/components/ui/select";
-
 import { useMemo, useState } from "react";
 import { Title } from "@/shared/components/custom/app-title";
 import { Table, TableBody, TableCell, TableRow } from "@/shared/components/ui/table";
 import { TimeAgo } from "@/shared/components/custom/get-time";
 import Link from "next/link";
 import { SmartPagination } from "@/shared/components/custom/smart-pagination";
+import { LuArrowDownWideNarrow, LuArrowUpNarrowWide } from "react-icons/lu";
 
 export function NovellChapterList({ novell }: { novell: NonNullable<getSinglePostBySlugType> }) {
   const [sort, setSort] = useState<"asc" | "desc">("asc");
@@ -33,17 +26,17 @@ export function NovellChapterList({ novell }: { novell: NonNullable<getSinglePos
   }, [novell.chapters, sort, page]);
   return (
     <div>
-      <div className="flex items-center justify-between mb-4">
+      <div className="  flex items-center justify-between mb-4">
         <Title size="lg" text={`Главы (${novell.chapters.length})`} className="text-start" />
-        <Select value={sort} onValueChange={(val: "asc" | "desc") => setSort(val)}>
-          <SelectTrigger className="w-[200px]">
-            <SelectValue placeholder="Сортировка" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="asc">По возрастанию</SelectItem>
-            <SelectItem value="desc">По убыванию</SelectItem>
-          </SelectContent>
-        </Select>
+
+        <button
+          onClick={() => setSort(sort === "asc" ? "desc" : "asc")}
+          className="max-w-[200px] cursor-pointer flex items-center justify-center p-1 bg-gray-100 rounded hover:bg-gray-200"
+          aria-label="Сортировка глав"
+        >
+          <span>Сортировать: </span>
+          {sort === "asc" ? <LuArrowUpNarrowWide size={20} /> : <LuArrowDownWideNarrow size={20} />}
+        </button>
       </div>
 
       {/* Список глав */}

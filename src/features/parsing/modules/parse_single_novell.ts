@@ -37,8 +37,32 @@ export async function parseSingleNovell({
   const parsed_tags = tags.map((e) => {
     return e.toLowerCase().replace(/поток/gi, "").trim();
   });
-  const novell_description = (await page.locator("div.navtxt").innerText()).trim();
-
+  const novell_description = (await page.locator("div.navtxt").innerHTML()).trim();
+  const cleaned_description = textEditor.removeAfterKeyword(
+    textEditor.removeAfterKeyword(
+      novell_description
+        .replace(/<div[^>]*>[\s\S]*?<\/div>/g, "")
+        .replace(/<h1[^>]*>[\s\S]*?<\/h1>/g, "")
+        .replace(/<a[^>]*>[\s\S]*?<\/a>/gi, "")
+        .replace(/<img[^>]*>/gi, "")
+        .replace(/font/g, "p")
+        .replace(/dir="auto"/g, "")
+        .replace(/style="vertical-align: inherit;"/g, "")
+        .replace(/<br>/g, "")
+        .replace(/&emsp;&emsp;/g, "")
+        .replace(/\u2003+/g, "")
+        .replace(/ &emsp;&emsp; /g, "")
+        .replace(/ &emsp;&emsp; /g, "")
+        .replace(/<p\s*>\s*<\/p>/g, "")
+        .replace(/<p  ><p  >/g, "<p>")
+        .replace(/<p ><p >/g, "<p>")
+        .replace(/<p><p>/g, "<p>")
+        .replace(/<\/p><\/p>/g, "</p>")
+        .trim(),
+      "Ключевые слова ",
+    ),
+    "Новые ключевые",
+  );
   const url_to_all_chapters = (await page.locator("a.more-btn").getAttribute("href")) as string;
   const img_url = (await page.locator("div.bookimg2 > img").getAttribute("src")) as string;
 
@@ -58,11 +82,7 @@ export async function parseSingleNovell({
     genre: novell[0].novell_genre,
     tags: parsed_tags,
     title: novell_title_ru,
-    novell_description: textEditor.removeAfterKeyword(
-      textEditor.removeAfterKeyword(novell_description, "Ключевые слова "),
-      "Новые ключевые",
-    ),
-
+    novell_description: cleaned_description,
     url_to_all_chapters,
     slug: slug,
     image_path: image_path as string,

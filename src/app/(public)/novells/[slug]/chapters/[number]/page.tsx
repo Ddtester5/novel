@@ -1,9 +1,9 @@
 import { getSingleChapter } from "@/entities/chapters/_actons/get_single_chapter";
 import { Title } from "@/shared/components/custom/app-title";
 import { TimeAgo } from "@/shared/components/custom/get-time";
-import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
 import { Card, CardContent } from "@/shared/components/ui/card";
+import { Separator } from "@/shared/components/ui/separator";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -53,17 +53,12 @@ export default async function ChapterPage({ params }: ChapterPageProps) {
       <main>
         {/* Chapter Header */}
         <div className="text-center mb-8">
-          <div className="flex gap-4">
-            <div className="mb-2">
-              <Badge variant="outline" className="inline-flex">
-                Глава {chapter_number}
-              </Badge>
-            </div>
-            <div className="flex items-center justify-center gap-4 text-sm text-muted-foreground">
-              <span>
-                Опубликовано <TimeAgo date={chapter.created_at} />
-              </span>
-            </div>
+          <div className="flex items-center justify-center gap-4 text-sm text-muted-foreground">
+            <span>Глава {chapter_number}</span>
+            <Separator orientation="vertical" />
+            <span>
+              Опубликовано <TimeAgo date={chapter.created_at} />
+            </span>
           </div>
           <Title text={chapter.title} size="xl" />
         </div>
